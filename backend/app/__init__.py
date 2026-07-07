@@ -1,0 +1,2 @@
+"""ScholarPilot backend application package."""
+
