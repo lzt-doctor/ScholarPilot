@@ -16,6 +16,8 @@ class WrongDimensionModel:
 def test_embedding_dimension_is_enforced() -> None:
     service = EmbeddingService(
         dimension=3,
+        backend="sentence-transformers",
+        allow_fallback=False,
         model_factory=lambda _name: WrongDimensionModel(),
     )
     with pytest.raises(EmbeddingDimensionError):
@@ -26,7 +28,12 @@ def test_embedding_load_failure_does_not_silently_fallback() -> None:
     def fail(_name):
         raise OSError("model missing")
 
-    service = EmbeddingService(dimension=8, allow_fallback=False, model_factory=fail)
+    service = EmbeddingService(
+        dimension=8,
+        backend="sentence-transformers",
+        allow_fallback=False,
+        model_factory=fail,
+    )
     with pytest.raises(EmbeddingUnavailableError):
         service.embed_text("no fallback")
     assert service.runtime_status().embedding_fallback_active is False
