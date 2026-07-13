@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from dataclasses import asdict, dataclass
 from typing import Any
 
 import httpx
@@ -6,88 +7,103 @@ import httpx
 from app.config import settings
 
 
+@dataclass(frozen=True)
+class LLMResult:
+    content: str
+    provider: str
+    model: str
+    mode: str
+    status: str
+    error_code: str | None = None
+
+    @property
+    def succeeded(self) -> bool:
+        return self.status == "success"
+
+    def runtime_metadata(self) -> dict[str, Any]:
+        data = asdict(self)
+        data.pop("content")
+        return data
+
+
 class LLMClient(ABC):
     @abstractmethod
-    async def generate_answer(self, question: str, context: str) -> str:
+    async def generate_answer(self, question: str, context: str) -> LLMResult:
         raise NotImplementedError
 
     @abstractmethod
     async def generate_study_plan(
         self, goal: str, background: str | None, weeks: int, hours_per_week: int
-    ) -> str:
+    ) -> LLMResult:
         raise NotImplementedError
 
     @abstractmethod
     async def analyze_mistake(
         self, question_text: str, user_answer: str, correct_answer: str
-    ) -> dict[str, str]:
+    ) -> LLMResult:
         raise NotImplementedError
 
 
 class MockLLMClient(LLMClient):
-    async def generate_answer(self, question: str, context: str) -> str:
+    """Explicit demo client. Its output is always labelled as mock at runtime."""
+
+    def _result(self, content: str) -> LLMResult:
+        return LLMResult(
+            content=content,
+            provider="mock",
+            model="deterministic-template",
+            mode="mock",
+            status="success",
+        )
+
+    async def generate_answer(self, question: str, context: str) -> LLMResult:
         if not context.strip():
-            return (
-                "当前知识库中还没有检索到可引用的资料。你可以先上传 PDF，"
-                "系统会解析、切分并向量化后再回答。"
-            )
+            return self._result("知识库证据不足。请先上传包含相关内容的 PDF。")
         preview = context[:420].replace("\n", " ")
-        return (
-            f"根据已上传资料，问题「{question}」可以从以下片段中得到初步回答："
-            f"{preview}... 建议结合引用页码继续阅读原文，并在接入真实大模型后获得更强的推理总结。"
+        return self._result(
+            "[Mock 模式] 根据检索片段，问题"
+            f"「{question}」可从以下证据中进行初步分析：{preview}... [1]"
         )
 
     async def generate_study_plan(
         self, goal: str, background: str | None, weeks: int, hours_per_week: int
-    ) -> str:
+    ) -> LLMResult:
         background_text = f"基础情况：{background}\n" if background else ""
-        weekly_hours = max(hours_per_week, 1)
-        return (
-            f"目标：{goal}\n"
-            f"{background_text}"
-            f"周期：{weeks} 周，每周约 {weekly_hours} 小时。\n\n"
-            "阶段 1：资料梳理与知识地图\n"
-            "- 上传核心论文、课程讲义和项目文档，建立 RAG 知识库。\n"
-            "- 每周整理 3-5 个关键词，形成概念卡片。\n\n"
-            "阶段 2：主题精读与问答训练\n"
-            "- 围绕算法、系统设计、实验方法进行资料问答。\n"
-            "- 对回答中的引用页码回看原文，补充笔记。\n\n"
-            "阶段 3：错题与薄弱点攻克\n"
-            "- 每周录入错题，按知识点统计高频错误。\n"
-            "- 针对薄弱点安排专项练习和复盘。\n\n"
-            "阶段 4：申请展示沉淀\n"
-            "- 将学习记录转化为项目报告、研究计划和面试话术。\n"
-            "- 准备 1 分钟项目介绍与技术追问答案。"
+        content = (
+            "[Mock 模式：确定性模板]\n"
+            f"目标：{goal}\n{background_text}"
+            f"周期：{weeks} 周，每周约 {max(hours_per_week, 1)} 小时。\n\n"
+            "阶段 1：资料梳理与知识地图\n- 整理核心论文、课程讲义和项目文档。\n\n"
+            "阶段 2：主题精读与问答训练\n- 围绕算法、系统设计和实验方法开展资料问答。\n\n"
+            "阶段 3：错题与薄弱点复盘\n- 按知识点统计高频错误并安排专项练习。\n\n"
+            "阶段 4：申请展示沉淀\n- 整理项目报告、研究计划和面试介绍。"
         )
+        return self._result(content)
 
     async def analyze_mistake(
         self, question_text: str, user_answer: str, correct_answer: str
-    ) -> dict[str, str]:
-        reason = (
-            "对题目条件或关键概念理解不完整，导致解题路径与标准答案存在偏差。"
-            "建议回到相关知识点，先复述定义，再补充边界条件和典型例题。"
-        )
+    ) -> LLMResult:
         point = _infer_knowledge_point(question_text + " " + correct_answer)
-        return {"error_reason": reason, "knowledge_point": point}
+        return self._result(
+            "错因：对题目条件或关键概念理解不完整，建议复核定义和边界条件。\n"
+            f"知识点：{point}"
+        )
 
 
-class OpenAICompatibleLLMClient(MockLLMClient):
-    """Simple adapter for OpenAI, DeepSeek, Ollama-compatible chat APIs."""
+class OpenAICompatibleLLMClient(LLMClient):
+    """OpenAI-compatible adapter that never silently replaces failed output."""
 
     async def _chat(self, messages: list[dict[str, str]]) -> str:
         if not settings.llm_api_base:
-            return ""
-
+            raise ValueError("LLM_API_BASE is not configured")
         headers: dict[str, str] = {"Content-Type": "application/json"}
         if settings.llm_api_key:
             headers["Authorization"] = f"Bearer {settings.llm_api_key}"
-
         payload: dict[str, Any] = {
             "model": settings.llm_model,
             "messages": messages,
             "temperature": 0.2,
         }
-
         async with httpx.AsyncClient(timeout=settings.llm_timeout_seconds) as client:
             response = await client.post(
                 settings.llm_api_base.rstrip("/") + "/chat/completions",
@@ -96,79 +112,80 @@ class OpenAICompatibleLLMClient(MockLLMClient):
             )
             response.raise_for_status()
             data = response.json()
-            return data["choices"][0]["message"]["content"]
+            return str(data["choices"][0]["message"]["content"]).strip()
 
-    async def generate_answer(self, question: str, context: str) -> str:
-        if settings.llm_provider == "mock":
-            return await super().generate_answer(question, context)
+    def _failure(self, code: str) -> LLMResult:
+        return LLMResult(
+            content="真实大模型当前不可用，系统未使用 mock 回答替代。",
+            provider=settings.llm_provider,
+            model=settings.llm_model,
+            mode="degraded",
+            status="error",
+            error_code=code,
+        )
+
+    async def _generate(self, messages: list[dict[str, str]]) -> LLMResult:
+        if not settings.llm_api_base:
+            return self._failure("llm_not_configured")
         try:
-            content = await self._chat(
-                [
-                    {
-                        "role": "system",
-                        "content": "你是 ScholarPilot 的学术 RAG 助手，只能基于给定资料回答，并用中文说明依据。",
-                    },
-                    {
-                        "role": "user",
-                        "content": f"资料片段：\n{context}\n\n问题：{question}",
-                    },
-                ]
+            content = await self._chat(messages)
+            if not content:
+                return self._failure("llm_empty_response")
+            return LLMResult(
+                content=content,
+                provider=settings.llm_provider,
+                model=settings.llm_model,
+                mode="real",
+                status="success",
             )
-            return content or await super().generate_answer(question, context)
         except Exception:
-            return await super().generate_answer(question, context)
+            return self._failure("llm_request_failed")
+
+    async def generate_answer(self, question: str, context: str) -> LLMResult:
+        return await self._generate(
+            [
+                {
+                    "role": "system",
+                    "content": (
+                        "你是 ScholarPilot 的学术文档问答服务。只能依据给定来源回答；"
+                        "每个事实陈述必须用 [1]、[2] 形式引用对应来源编号，不得编造来源。"
+                    ),
+                },
+                {"role": "user", "content": f"来源：\n{context}\n\n问题：{question}"},
+            ]
+        )
 
     async def generate_study_plan(
         self, goal: str, background: str | None, weeks: int, hours_per_week: int
-    ) -> str:
-        if settings.llm_provider == "mock":
-            return await super().generate_study_plan(goal, background, weeks, hours_per_week)
-        try:
-            content = await self._chat(
-                [
-                    {
-                        "role": "system",
-                        "content": "你是研究生申请学习规划 Agent，请输出结构化中文学习计划。",
-                    },
-                    {
-                        "role": "user",
-                        "content": (
-                            f"目标：{goal}\n基础：{background or '未提供'}\n"
-                            f"周期：{weeks} 周，每周 {hours_per_week} 小时"
-                        ),
-                    },
-                ]
-            )
-            return content or await super().generate_study_plan(
-                goal, background, weeks, hours_per_week
-            )
-        except Exception:
-            return await super().generate_study_plan(goal, background, weeks, hours_per_week)
+    ) -> LLMResult:
+        return await self._generate(
+            [
+                {"role": "system", "content": "请输出结构化中文学习计划。"},
+                {
+                    "role": "user",
+                    "content": (
+                        f"目标：{goal}\n基础：{background or '未提供'}\n"
+                        f"周期：{weeks} 周，每周 {hours_per_week} 小时"
+                    ),
+                },
+            ]
+        )
 
     async def analyze_mistake(
         self, question_text: str, user_answer: str, correct_answer: str
-    ) -> dict[str, str]:
-        if settings.llm_provider == "mock":
-            return await super().analyze_mistake(question_text, user_answer, correct_answer)
-        try:
-            content = await self._chat(
-                [
-                    {
-                        "role": "system",
-                        "content": "你是错题分析 Agent，输出两行：错因：... 知识点：...",
-                    },
-                    {
-                        "role": "user",
-                        "content": (
-                            f"题目：{question_text}\n学生答案：{user_answer}\n"
-                            f"正确答案：{correct_answer}"
-                        ),
-                    },
-                ]
-            )
-            return _parse_mistake_analysis(content)
-        except Exception:
-            return await super().analyze_mistake(question_text, user_answer, correct_answer)
+    ) -> LLMResult:
+        return await self._generate(
+            [
+                {"role": "system", "content": "输出两行：错因：... 知识点：..."},
+                {
+                    "role": "user",
+                    "content": (
+                        f"题目：{question_text}\n学生答案：{user_answer}\n"
+                        f"正确答案：{correct_answer}"
+                    ),
+                },
+            ]
+        )
 
 
 def _infer_knowledge_point(text: str) -> str:
@@ -191,7 +208,7 @@ def _infer_knowledge_point(text: str) -> str:
     return "核心概念理解"
 
 
-def _parse_mistake_analysis(content: str) -> dict[str, str]:
+def parse_mistake_analysis(content: str) -> dict[str, str]:
     reason = ""
     point = ""
     for line in content.splitlines():
@@ -206,4 +223,21 @@ def _parse_mistake_analysis(content: str) -> dict[str, str]:
 
 
 def get_llm_client() -> LLMClient:
+    if settings.llm_provider.lower() == "mock":
+        return MockLLMClient()
     return OpenAICompatibleLLMClient()
+
+
+def get_llm_runtime_status() -> dict[str, str]:
+    provider = settings.llm_provider.lower()
+    if provider == "mock":
+        mode = "mock"
+    elif settings.llm_api_base:
+        mode = "real_configured"
+    else:
+        mode = "unavailable"
+    return {
+        "llm_provider": provider,
+        "llm_mode": mode,
+        "llm_model": "deterministic-template" if mode == "mock" else settings.llm_model,
+    }

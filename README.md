@@ -1,206 +1,243 @@
 # ScholarPilot
 
-ScholarPilot 是一个基于 Agentic RAG 的学术资料智能问答与学习规划系统，面向计算机科学与技术、人工智能、软件工程方向的研究生申请项目展示。系统支持用户认证、PDF 学术资料上传、文档解析、chunk 切分、向量化存储、基于 pgvector 的检索增强问答、答案来源引用、学习计划生成、错题分析和数据统计。
+ScholarPilot 是一个面向学术 PDF 的可追溯 RAG 检索系统与可复现实验平台。系统保留用户认证、文档管理、问答、学习计划、错题分析和数据统计，并重点解决三个问题：检索结果从哪里来、运行时实际用了什么模型、不同检索方法如何被重复评估。
 
-## 项目亮点
+## 能力边界
 
-- 完整 RAG 链路：PDF 解析、文本切分、embedding、pgvector 检索、上下文拼接、LLM 回答、confidence 与引用返回。
-- Agentic 设计：内置 RetrievalAgent、StudyPlannerAgent、MistakeAnalysisAgent，职责清晰，便于扩展。
-- 可演示性强：没有真实大模型 API 时自动使用 mock LLM，保证问答、计划和错题分析流程可运行。
-- 工程结构完整：FastAPI 分层后端、Vue 3 管理台前端、PostgreSQL + pgvector、Docker Compose 一键启动。
-- 面向申请展示：文档、报告、简历描述齐备，可体现 AI、数据库、软件工程和产品化能力。
+- `sources`、编号引用与 `citation_validity` 提供来源可追溯性，但不等于事实核验。
+- `evidence_strength` 只描述检索证据强弱，不是答案正确率、模型置信概率或学术结论保证。
+- `mock` 是明确标记的演示模式。真实 LLM 失败时返回 `degraded` 状态，不会用 mock 内容伪装成功。
+- hash embedding 默认禁用。只有显式设置 `ALLOW_EMBEDDING_FALLBACK=true` 才能启用，且状态页会显示 fallback。
+- 仓库中的 `demo-v1` 是合成小样本，只用于验证实验链路，不能代表真实学术语料效果。
+
+## 系统亮点
+
+- 四种统一检索基线：pgvector 精确余弦、HNSW、基于 jieba 的 BM25、基于 RRF 的 Hybrid Search。
+- 全链路用户隔离：向量 SQL 和 BM25 缓存均按 `user_id` 约束。
+- 模型版本追踪：每个文档记录 embedding 模型、维度、版本和索引状态；不兼容时拒绝检索并要求重新索引。
+- 引用校验：回答使用 `[1]`、`[2]` 编号，服务端校验编号是否存在并返回实际引用的 chunk ID。
+- 运行真实性：`/health/details` 和前端“运行状态”页展示模型、mock/fallback、数据库和 pgvector 状态。
+- 可复现实验：输出 Recall@5、Recall@10、MRR、nDCG@10、P50/P95/P99、QPS、配置和逐查询原始结果。
+- 工程基线：Alembic、pytest、GitHub Actions、Docker Compose、文件校验、线程池解析和路由级动态加载。
 
 ## 技术栈
 
 前端：Vue 3、Vite、Element Plus、Axios、ECharts  
-后端：Python、FastAPI、SQLAlchemy、Pydantic、JWT  
-数据库：PostgreSQL、pgvector  
-AI / RAG：sentence-transformers、可替换 LLMClient、mock LLM fallback  
-文档解析：PyMuPDF  
-部署：Docker、Docker Compose、Nginx
+后端：FastAPI、SQLAlchemy、Pydantic、JWT、Alembic
+数据库：PostgreSQL 16、pgvector
+检索：sentence-transformers、pgvector HNSW、jieba、rank-bm25、RRF
+文档：PyMuPDF
+部署与质量：Docker Compose、pytest、ruff、GitHub Actions
 
 ## 系统架构
 
 ```mermaid
 flowchart LR
-  U["用户浏览器"] --> F["Vue 3 + Element Plus 前端"]
-  F --> B["FastAPI 后端"]
-  B --> A["Agent 层"]
-  A --> R["RetrievalAgent"]
-  A --> P["StudyPlannerAgent"]
-  A --> M["MistakeAnalysisAgent"]
-  B --> E["EmbeddingService"]
-  B --> L["LLMClient / MockLLMClient"]
-  B --> D[("PostgreSQL + pgvector")]
-  B --> PDF["PyMuPDF PDF 解析"]
+  UI["Vue 3 Web UI"] --> API["FastAPI API"]
+  API --> AUTH["认证与业务服务"]
+  API --> ORCH["RetrievalService"]
+  ORCH --> EXACT["Exact cosine"]
+  ORCH --> HNSW["pgvector HNSW"]
+  ORCH --> BM25["jieba + BM25"]
+  ORCH --> HYBRID["RRF Hybrid"]
+  EXACT --> DB[("PostgreSQL + pgvector")]
+  HNSW --> DB
+  BM25 --> DB
+  HYBRID --> DB
+  API --> LLM["Explicit mock or real LLM"]
+  API --> EXP["Evaluation scripts"]
 ```
 
-## 功能模块
+PDF 解析与 embedding 在线程池中执行，避免阻塞 FastAPI event loop。正式表结构由 Alembic 管理；`database/init.sql` 只负责启用 pgvector 扩展。
 
-- 用户模块：注册、登录、JWT 鉴权、当前用户信息。
-- 文档模块：PDF 上传、解析、chunk 切分、向量化、列表、详情、删除。
-- RAG 问答模块：问题 embedding、Top-K 检索、上下文构造、回答生成、来源引用、confidence、会话历史。
-- 学习计划模块：根据目标、基础、周期和每周投入生成学习计划。
-- 错题模块：记录错题，自动分析错因和知识点，支持统计。
-- 数据统计模块：资料数量、chunk 数、问答会话、错题分布、资料分类图表。
+## 检索方法
+
+| 模式 | 实现 | 用途 | 返回信息 |
+| --- | --- | --- | --- |
+| `exact` | pgvector cosine distance，禁用近似索引 | 精确基线 | `similarity`、`vector_rank` |
+| `hnsw` | `vector_cosine_ops` HNSW | 近似向量检索 | `similarity`、`vector_rank`、实际 HNSW 参数 |
+| `bm25` | jieba 可复现分词 + BM25Okapi | 术语和关键词检索 | `lexical_score`、`lexical_rank` |
+| `hybrid` | BM25 + 向量候选，RRF 合并 | 默认检索 | 两类 rank、`fused_score` |
+
+HNSW 的 `m` 与 `ef_construction` 在迁移创建索引时生效；`ef_search` 在每次查询事务中设置。Hybrid 默认以 HNSW 作为向量分支，候选集和 RRF `k` 均可配置。
 
 ## RAG 工作流程
 
-1. 用户上传 PDF。
-2. 后端使用 PyMuPDF 提取每页文本。
-3. 按页码和段落切分 chunk，并保留 page_number、chunk_index、section_title。
-4. 使用可配置的 sentence-transformers 模型生成 embedding；若模型暂不可用，使用 deterministic hash embedding 保证演示。
-5. embedding 写入 PostgreSQL 的 pgvector 字段。
-6. 用户在 AI 问答页提问。
-7. 系统生成问题 embedding。
-8. pgvector 使用 cosine distance 检索 Top-K chunk。
-9. 后端拼接 context。
-10. LLMClient 生成回答；未配置真实 API 时使用 MockLLMClient。
-11. 返回 answer、sources、confidence，并保存到 chat history。
+1. 校验 PDF 扩展名、内容头和大小，保存原文件。
+2. PyMuPDF 解析文本，按页和段落切分 chunk。
+3. 生成 embedding，校验输出维度并写入 pgvector。
+4. 文档记录模型、维度、版本和 `indexing_status`。
+5. 提问时先检查文档向量版本与当前查询模型是否一致。
+6. 按 `retrieval_mode` 检索，并始终用 `user_id` 隔离。
+7. 计算 `evidence_strength`；低于阈值时不调用 LLM。
+8. 将来源编号为 `[1]`、`[2]` 后调用显式配置的 LLM。
+9. 校验回答中的引用编号，返回 `citation_validity` 和 `cited_source_ids`。
+10. 保存回答、来源、检索配置和运行元数据。
 
-每条 `source` 至少包含：
+`POST /chat` 保留原有 `answer`、`sources`、`confidence` 和 `session_id` 字段。`confidence` 仅作为旧客户端兼容字段，值与 `evidence_strength` 相同，新代码应使用后者。
 
-- `document_name`：引用来源文件。
-- `page_number`：PDF 页码，方便回看原文。
-- `chunk_index`：页内切片序号，方便定位上下文。
-- `chunk_text`：被检索命中的原文片段。
-- `similarity`：问题向量与片段向量的相似度。
+## 运行状态
 
-引用来源是可信 RAG 的关键：系统不只给出自然语言回答，还暴露回答依据，让用户可以判断答案是否确实来自上传资料，降低幻觉风险，并方便在学术阅读、面试复盘和项目展示中追溯原文。
+`GET /health/details` 返回：
 
-## Embedding 模型配置
+- `active_embedding_backend`、`embedding_model`、`embedding_dimension`
+- `embedding_model_loaded`、fallback 是否允许和是否启用
+- `llm_provider`、`llm_mode`、`llm_model`
+- `database_status`、`pgvector_status`
 
-默认模型保持轻量：
+系统不会通过健康检查主动下载模型。模型尚未发生首次推理时，`embedding_model_loaded=false` 是正常状态。
 
-```bash
-EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
-```
+## 数据库与迁移
 
-后续可切换为更适合中英文或长文本场景的模型：
+核心表包括 `users`、`documents`、`document_chunks`、`chat_sessions`、`chat_messages`、`study_plans` 和 `mistake_records`。
 
-```bash
-EMBEDDING_MODEL=BAAI/bge-m3
-EMBEDDING_MODEL=intfloat/multilingual-e5-base
-```
+新增文档字段：
 
-embedding 做成可配置，是为了在“演示稳定”和“检索效果升级”之间保持弹性：MVP 默认模型下载较小、启动较快；如果后续追求中文学术资料效果，可以替换模型并重新向量化文档。注意：不同模型输出维度可能不同，切换时需要同步调整 `EMBEDDING_DIMENSION`，并重建或重新上传文档以生成新的向量。
+- `embedding_model`
+- `embedding_dimension`
+- `embedding_version`
+- `indexing_status`
+- `indexing_error`
 
-## Confidence 设计
+新增聊天记录字段保存 `runtime_metadata`、`evidence_strength`、引用校验和引用 chunk ID。HNSW 索引由 `0002_research` 迁移创建。
 
-`/chat` 会返回 `confidence`，取值为 `high`、`medium`、`low`。当前版本采用轻量规则：
-
-- 最高 similarity 较高，并且可靠来源数量充足，则为 `high`。
-- 有来源但 similarity 一般，则为 `medium`。
-- 没有来源或相似度过低，则为 `low`。
-
-confidence 不是事实正确性的严格证明，而是一个可解释的检索质量提示，帮助用户判断当前回答是否值得信任，以及是否需要继续上传资料或改写问题。
-
-## 数据库设计
-
-核心表包括：
-
-- users：用户账号、邮箱、密码哈希、创建时间。
-- documents：用户资料、文件名、类型、摘要、分类。
-- document_chunks：页码、chunk 序号、文本、embedding、章节标题。
-- chat_sessions：用户问答会话。
-- chat_messages：用户/助手消息、来源引用。
-- mistake_records：错题、用户答案、正确答案、错因、知识点。
-- study_plans：学习目标、计划内容。
-
-## Docker 启动方式
-
-```bash
-docker compose up --build
-```
-
-启动后访问：
-
-- 前端：http://localhost:5173
-- 后端 API：http://localhost:8000
-- API 文档：http://localhost:8000/docs
-- PostgreSQL：localhost:5432
-
-默认账号需要在前端注册。默认 LLM_PROVIDER 为 mock，因此不配置外部 API 也能演示完整功能。
-
-## 本地开发方式
-
-后端：
+原 MVP 数据库没有模型元数据。首次迁移会将旧文档标记为 `requires_reindex`，不会猜测其模型版本；请在文档页点击“重新索引”。
 
 ```bash
 cd backend
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-uvicorn app.main:app --reload
+alembic current
+alembic upgrade head
 ```
 
-前端：
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-本地开发需要 PostgreSQL + pgvector。可以只启动数据库：
-
-```bash
-docker compose up db
-```
-
-## 接入真实 LLM
-
-后端通过 `backend/app/services/llm_client.py` 提供可替换接口。可在环境变量中配置 OpenAI / DeepSeek / Ollama 兼容的 Chat Completions 服务：
-
-Docker 方式建议先复制根目录环境变量模板：
+## Docker 启动
 
 ```bash
 cp .env.example .env
+docker compose up --build -d
+docker compose ps
 ```
 
-然后在根目录 `.env` 中配置：
+访问：
 
-```env
-LLM_PROVIDER=openai-compatible
-LLM_API_BASE=https://api.openai.com/v1
-LLM_API_KEY=your-key
-LLM_MODEL=gpt-4o-mini
+- Web：<http://localhost:5173>
+- API 文档：<http://localhost:8000/docs>
+- 详细状态：<http://localhost:8000/health/details>
+
+默认 `LLM_PROVIDER=mock`，界面和 API 会明确显示 mock。接入 OpenAI-compatible 服务时配置 `LLM_PROVIDER`、`LLM_API_BASE`、`LLM_API_KEY` 和 `LLM_MODEL`；真实服务失败会返回降级状态，不会自动换成 mock。
+
+## 关键配置
+
+```dotenv
+EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
+EMBEDDING_DIMENSION=384
+EMBEDDING_VERSION=1
+EMBEDDING_BACKEND=auto
+ALLOW_EMBEDDING_FALLBACK=false
+
+RETRIEVAL_MODE=hybrid
+RETRIEVAL_CANDIDATE_K=20
+RETRIEVAL_MIN_RELEVANCE=0.25
+HYBRID_RRF_K=60
+HNSW_M=16
+HNSW_EF_CONSTRUCTION=64
+HNSW_EF_SEARCH=40
 ```
 
-本地后端开发方式可以复制 `backend/.env.example` 为 `backend/.env` 后填写同样的变量。
+切换 embedding 模型时必须同步确认向量维度并重新索引。已经建立的 pgvector 列维度无法只靠环境变量改变，变更维度需要新的数据库迁移。
 
-如果使用 DeepSeek 或本地 Ollama，只要服务兼容 Chat Completions 格式，就把 `LLM_API_BASE` 和 `LLM_MODEL` 换成对应地址与模型名即可。未配置真实服务时保持 `LLM_PROVIDER=mock`，系统仍能完成上传、检索、引用来源和 mock 回答演示。
+## 本地开发
 
-## 当前版本不足与后续计划
+```bash
+# 后端
+cd backend
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+alembic upgrade head
+uvicorn app.main:app --reload
 
-当前版本仍是稳定可演示的 MVP，主要不足包括：只使用向量检索，暂未加入关键词检索；PDF 解析以文本型 PDF 为主；confidence 规则较轻量；缺少系统化 RAG 评估和自动化测试。
+# 前端
+cd frontend
+npm ci
+npm run dev
+```
 
-后续计划：
+## 测试与构建
 
-- Hybrid Search：结合向量检索与关键词检索。
-- Reranker：对 Top-K 结果二次排序，提高引用质量。
-- Redis + Celery：将 PDF 解析和 embedding 改为后台任务。
-- OCR：支持扫描版 PDF。
-- 知识图谱：沉淀课程知识点和错题关系。
-- RAG 评估面板：展示命中率、引用覆盖率、相似度分布和回答质量。
-- pytest：补充后端接口和服务层测试。
-- Alembic：管理数据库迁移。
+```bash
+make test
+make build
+make verify
+```
 
-## 项目截图占位说明
+pytest 使用 deterministic fake embedding 和 mock client，不访问外部模型或网络。CI 会运行后端测试、ruff、Alembic 迁移和前端生产构建。
 
-建议在完成演示数据后补充以下截图：
+## 可复现实验
 
-- 登录与注册页
-- Dashboard 总览页
-- PDF 上传与文档 chunk 详情页
-- AI 问答与来源引用页
-- 学习计划生成页
-- 错题分析与统计页
+数据格式位于 `experiments/datasets/demo_queries.jsonl`：
 
-## GitHub 发布
+```json
+{
+  "query_id": "demo-q1",
+  "question": "What is exact vector retrieval used for?",
+  "relevant_chunk_ids": [-1001],
+  "category": "vector-retrieval",
+  "difficulty": "easy"
+}
+```
 
-发布前请参考 [docs/github_publish_guide.md](docs/github_publish_guide.md)，重点确认 `.env`、真实 API Key、上传文件、`node_modules` 和构建产物不会被提交。
+一键运行：
 
-## 研究生申请中的项目价值
+```bash
+make eval-demo
+```
 
-ScholarPilot 能展示申请者对人工智能应用系统的完整理解：从 RAG 算法流程、向量数据库、Agent 角色拆分，到 Web 工程、数据库建模、Docker 部署和产品化演示。项目既能作为 AI/软件工程方向的作品集，也能自然延展为研究计划，例如个性化学习、可信问答、教育智能体、多源学术知识库和检索增强生成评估。
+该命令实际执行精确向量、HNSW、BM25、Hybrid、延迟测试与消融配置。结果写入 `experiments/results/demo/` 的 JSON 和 CSV，每份都包含：
+
+- `git_commit`、UTC `timestamp`、`dataset_version`
+- `retrieval_config`、`embedding_model`、运行环境
+- summary 与 `raw_per_query_results`
+
+指标定义：Recall@K 衡量相关 chunk 覆盖；MRR 衡量首个相关结果排名；nDCG@10 衡量前十排序质量；延迟脚本报告 mean、P50、P95、P99 和 QPS。
+
+这些结果只描述 `demo-v1` 合成数据。研究性结论必须换成可公开、标注规范的真实学术数据集并报告统计不确定性。
+
+## API 模块
+
+- 认证：注册、登录、当前用户
+- 文档：上传、列表、详情、删除、重新索引
+- 问答：检索模式、会话历史、引用、运行元数据、删除会话
+- 学习计划：显式 mock 或真实 LLM 服务
+- 错题分析：显式 mock 或真实 LLM 服务
+- 统计：文档、chunk、会话、计划和错题概览
+
+## 当前限制
+
+- 仅处理文本型 PDF，没有 OCR、表格结构恢复和公式语义解析。
+- BM25 缓存为单进程内存缓存，多 worker 部署需要共享缓存或可重建索引策略。
+- HNSW 在小型 demo 数据上不能代表大规模 ANN 收益。
+- `citation_validity` 只验证编号存在，不判断被引片段是否真正支持对应论断。
+- `evidence_strength` 是规则化检索信号，不是校准概率。
+- 学习计划和错题分析仍是单次服务调用，不构成自主规划、多工具执行或多智能体系统。
+- 维度变更需要数据库迁移；当前没有在线双索引切换。
+- 后台工作使用线程池，不是持久任务队列；进程中断时不会自动恢复任务。
+
+## 后续研究方向
+
+可在真实数据和评估基线建立后继续研究 reranker、OCR、持久任务队列、引用蕴含判断、知识图谱、多模态文档解析和 RAG 评估面板。它们是后续计划，不属于当前已实现能力。
+
+## 文档
+
+- [研究报告](docs/research_report.md)
+- [项目报告](docs/project_report.md)
+- [系统设计](docs/system_design.md)
+- [简历描述](docs/resume_description.md)
+- [GitHub 发布指南](docs/github_publish_guide.md)
+
+## 截图
+
+建议在 `docs/screenshots/` 放置登录、文档索引状态、Hybrid 问答引用、运行状态和实验结果截图，并在发布前核对截图中不包含 API Key 或个人资料。
+
+## 研究生申请价值
+
+项目展示的重点不是“调用了一个聊天模型”，而是把学术检索问题拆成可解释的基线、可追踪的数据版本、明确的失败状态和可复现的评估流程。它可以支撑对信息检索、RAG 可信性、向量数据库和软件工程实验方法的进一步研究，但不应被描述为已经解决幻觉或达到生产级学术搜索质量。

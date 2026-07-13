@@ -3,7 +3,7 @@
     <div class="page-header">
       <div>
         <h1 class="page-title">AI 问答</h1>
-        <p class="page-subtitle">基于已上传资料进行向量检索，并返回带来源引用的 RAG 回答。</p>
+        <p class="page-subtitle">对学术文档执行可配置检索，返回编号引用、证据强度和实际运行元数据。</p>
       </div>
       <el-button :icon="Refresh" @click="loadSessions">刷新会话</el-button>
     </div>
@@ -48,8 +48,14 @@
           >
             <div class="bubble">
               <div v-if="message.role === 'assistant'" class="answer-meta">
-                <el-tag size="small" :type="confidenceType(messageConfidence(message))">
-                  可信度：{{ confidenceLabel(messageConfidence(message)) }}
+                <el-tag size="small" :type="evidenceType(messageEvidence(message))">
+                  证据强度：{{ evidenceLabel(messageEvidence(message)) }}
+                </el-tag>
+                <el-tag size="small" :type="citationType(message.citation_validity)">
+                  引用{{ citationLabel(message.citation_validity) }}
+                </el-tag>
+                <el-tag v-if="message.runtime_metadata" size="small" type="info">
+                  {{ message.runtime_metadata.retrieval_mode }} · {{ message.runtime_metadata.llm_mode }}
                 </el-tag>
               </div>
               <div class="mono-block">{{ message.content }}</div>
@@ -57,10 +63,13 @@
                 <el-collapse>
                   <el-collapse-item title="来源引用" name="sources">
                     <div class="source-list">
-                      <div v-for="source in message.sources" :key="sourceKey(source)" class="source-item">
+                      <div v-for="(source, index) in message.sources" :key="sourceKey(source)" class="source-item">
                         <div class="source-meta">
-                          <span>{{ source.document_name }} · 第 {{ source.page_number }} 页 · Chunk {{ source.chunk_index }}</span>
-                          <span>similarity {{ sourceSimilarity(source) }}</span>
+                          <span>[{{ index + 1 }}] {{ source.document_name }} · 第 {{ source.page_number }} 页 · Chunk {{ source.chunk_index }}</span>
+                          <span>{{ sourceScoreSummary(source) }}</span>
+                        </div>
+                        <div v-if="source.lexical_rank || source.vector_rank" class="source-ranks muted">
+                          lexical rank {{ source.lexical_rank ?? '-' }} · vector rank {{ source.vector_rank ?? '-' }}
                         </div>
                         <div class="muted">{{ source.chunk_text }}</div>
                       </div>
@@ -73,14 +82,17 @@
         </div>
 
         <div class="ask-bar">
-          <el-input
-            v-model="question"
-            type="textarea"
-            :rows="3"
-            resize="none"
-            placeholder="输入你的问题，系统会检索 Top-K 文档片段并生成回答"
-            @keydown.enter.exact.prevent="ask"
-          />
+          <div class="ask-inputs">
+            <el-segmented v-model="retrievalMode" :options="retrievalOptions" />
+            <el-input
+              v-model="question"
+              type="textarea"
+              :rows="3"
+              resize="none"
+              placeholder="输入问题；证据不足时系统不会调用大模型"
+              @keydown.enter.exact.prevent="ask"
+            />
+          </div>
           <el-button type="primary" :loading="asking" :icon="Promotion" @click="ask">
             发送
           </el-button>
@@ -101,9 +113,16 @@ const sessions = ref([])
 const messages = ref([])
 const activeSessionId = ref(null)
 const question = ref('')
+const retrievalMode = ref('hybrid')
 const asking = ref(false)
 const deletingSessionId = ref(null)
 const messageBoxRef = ref()
+const retrievalOptions = [
+  { label: 'Hybrid', value: 'hybrid' },
+  { label: 'HNSW', value: 'hnsw' },
+  { label: 'Exact', value: 'exact' },
+  { label: 'BM25', value: 'bm25' },
+]
 
 const loadSessions = async () => {
   sessions.value = await getChatSessions()
@@ -171,14 +190,22 @@ const ask = async () => {
   await scrollToBottom()
 
   try {
-    const result = await sendQuestion({ question: text, session_id: activeSessionId.value })
+    const result = await sendQuestion({
+      question: text,
+      session_id: activeSessionId.value,
+      retrieval_mode: retrievalMode.value,
+    })
     activeSessionId.value = result.session_id
     messages.value.push({
       localId: Date.now() + 1,
       role: 'assistant',
       content: result.answer,
       sources: result.sources,
+      evidence_strength: result.evidence_strength,
       confidence: result.confidence,
+      citation_validity: result.citation_validity,
+      cited_source_ids: result.cited_source_ids,
+      runtime_metadata: result.runtime_metadata,
     })
     await loadSessions()
     await scrollToBottom()
@@ -195,23 +222,38 @@ const scrollToBottom = async () => {
 }
 
 const sourceKey = (source) =>
-  `${source.document_id}-${source.page_number}-${source.chunk_index}-${source.similarity ?? source.score}`
+  `${source.source_id ?? source.document_id}-${source.page_number}-${source.chunk_index}`
 const formatTime = (value) => (value ? new Date(value).toLocaleDateString() : '-')
 
-const sourceSimilarity = (source) => Number(source.similarity ?? source.score ?? 0).toFixed(2)
-const messageConfidence = (message) => {
+const formatScore = (value) => (value === null || value === undefined ? '-' : Number(value).toFixed(3))
+const sourceScoreSummary = (source) => {
+  const parts = []
+  if (source.similarity !== null && source.similarity !== undefined) {
+    parts.push(`similarity ${formatScore(source.similarity)}`)
+  }
+  if (source.fused_score !== null && source.fused_score !== undefined) {
+    parts.push(`fused ${formatScore(source.fused_score)}`)
+  }
+  if (source.lexical_score !== null && source.lexical_score !== undefined) {
+    parts.push(`BM25 ${formatScore(source.lexical_score)}`)
+  }
+  return parts.join(' · ') || 'score -'
+}
+const messageEvidence = (message) => {
+  if (message.evidence_strength) return message.evidence_strength
   if (message.confidence) return message.confidence
-  const similarities = message.sources?.map((source) => Number(source.similarity ?? source.score ?? 0)) || []
+  const similarities = message.sources?.map((source) => Number(source.relevance_score ?? source.similarity ?? source.score ?? 0)) || []
   if (!similarities.length || Math.max(...similarities) < 0.25) return 'low'
   const reliable = similarities.filter((value) => value >= 0.55)
   if (Math.max(...similarities) >= 0.72 && reliable.length >= 2) return 'high'
   if (Math.max(...similarities) >= 0.4 || reliable.length) return 'medium'
   return 'low'
 }
-const confidenceLabel = (confidence) =>
-  ({ high: '高', medium: '中', low: '低' })[confidence] || '低'
-const confidenceType = (confidence) =>
-  ({ high: 'success', medium: 'warning', low: 'info' })[confidence] || 'info'
+const evidenceLabel = (value) => ({ high: '高', medium: '中', low: '低' })[value] || '低'
+const evidenceType = (value) =>
+  ({ high: 'success', medium: 'warning', low: 'info' })[value] || 'info'
+const citationLabel = (value) => (value === true ? '已校验' : value === false ? '未通过校验' : '未记录')
+const citationType = (value) => (value === true ? 'success' : value === false ? 'danger' : 'info')
 
 onMounted(loadSessions)
 </script>
@@ -339,6 +381,9 @@ onMounted(loadSessions)
 }
 
 .answer-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   margin-bottom: 10px;
 }
 
@@ -349,6 +394,18 @@ onMounted(loadSessions)
   padding: 16px;
   border-top: 1px solid var(--sp-line);
   background: #fbfcff;
+}
+
+.ask-inputs {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.source-ranks {
+  margin: -2px 0 8px;
+  font-size: 12px;
 }
 
 @media (max-width: 900px) {

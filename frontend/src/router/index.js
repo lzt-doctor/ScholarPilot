@@ -1,44 +1,32 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import { authStore } from '../store/auth'
-import AppLayout from '../components/AppLayout.vue'
-import Login from '../views/Login.vue'
-import Register from '../views/Register.vue'
-import Dashboard from '../views/Dashboard.vue'
-import Documents from '../views/Documents.vue'
-import Chat from '../views/Chat.vue'
-import StudyPlan from '../views/StudyPlan.vue'
-import Mistakes from '../views/Mistakes.vue'
-import Statistics from '../views/Statistics.vue'
+
 
 const routes = [
-  { path: '/login', name: 'login', component: Login },
-  { path: '/register', name: 'register', component: Register },
+  { path: '/login', name: 'login', component: () => import('../views/Login.vue') },
+  { path: '/register', name: 'register', component: () => import('../views/Register.vue') },
   {
     path: '/',
-    component: AppLayout,
+    component: () => import('../components/AppLayout.vue'),
     meta: { requiresAuth: true },
     children: [
       { path: '', redirect: '/dashboard' },
-      { path: 'dashboard', name: 'dashboard', component: Dashboard },
-      { path: 'documents', name: 'documents', component: Documents },
-      { path: 'chat', name: 'chat', component: Chat },
-      { path: 'study-plan', name: 'studyPlan', component: StudyPlan },
-      { path: 'mistakes', name: 'mistakes', component: Mistakes },
-      { path: 'statistics', name: 'statistics', component: Statistics },
+      { path: 'dashboard', name: 'dashboard', component: () => import('../views/Dashboard.vue') },
+      { path: 'documents', name: 'documents', component: () => import('../views/Documents.vue') },
+      { path: 'chat', name: 'chat', component: () => import('../views/Chat.vue') },
+      { path: 'study-plan', name: 'studyPlan', component: () => import('../views/StudyPlan.vue') },
+      { path: 'mistakes', name: 'mistakes', component: () => import('../views/Mistakes.vue') },
+      { path: 'statistics', name: 'statistics', component: () => import('../views/Statistics.vue') },
+      { path: 'runtime', name: 'runtime', component: () => import('../views/RuntimeStatus.vue') },
     ],
   },
 ]
 
-const router = createRouter({
-  history: createWebHistory(),
-  routes,
-})
+const router = createRouter({ history: createWebHistory(), routes })
 
 router.beforeEach((to) => {
-  if (to.meta.requiresAuth && !authStore.token) {
-    return { name: 'login' }
-  }
+  if (to.meta.requiresAuth && !authStore.token) return { name: 'login' }
   if ((to.name === 'login' || to.name === 'register') && authStore.token) {
     return { name: 'dashboard' }
   }
@@ -46,4 +34,3 @@ router.beforeEach((to) => {
 })
 
 export default router
-

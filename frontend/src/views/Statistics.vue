@@ -36,10 +36,15 @@
 <script setup>
 import { computed, nextTick, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { Refresh } from '@element-plus/icons-vue'
-import * as echarts from 'echarts'
+import { BarChart, PieChart } from 'echarts/charts'
+import { GridComponent, TooltipComponent } from 'echarts/components'
+import { init, use } from 'echarts/core'
+import { CanvasRenderer } from 'echarts/renderers'
 
 import { getDashboardSummary } from '../api/dashboard'
 import { getMistakeStatistics } from '../api/mistakes'
+
+use([BarChart, PieChart, GridComponent, TooltipComponent, CanvasRenderer])
 
 const summary = reactive({
   documents_count: 0,
@@ -78,9 +83,9 @@ const load = async () => {
 }
 
 const render = () => {
-  subjectChart = subjectChart || echarts.init(subjectChartRef.value)
-  pointChart = pointChart || echarts.init(pointChartRef.value)
-  docChart = docChart || echarts.init(docChartRef.value)
+  subjectChart = subjectChart || init(subjectChartRef.value)
+  pointChart = pointChart || init(pointChartRef.value)
+  docChart = docChart || init(docChartRef.value)
 
   const subjectData = mistakes.by_subject.length
     ? mistakes.by_subject
@@ -145,4 +150,3 @@ onUnmounted(() => {
   docChart?.dispose()
 })
 </script>
-

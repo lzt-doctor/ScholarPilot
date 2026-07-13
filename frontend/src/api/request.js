@@ -23,10 +23,14 @@ request.interceptors.response.use(
     if (status === 401) {
       authStore.clear()
     }
-    ElMessage.error(Array.isArray(detail) ? detail[0]?.msg || '参数错误' : detail)
+    const message = Array.isArray(detail)
+      ? detail[0]?.msg || '参数错误'
+      : typeof detail === 'object'
+        ? detail.message || detail.code || '请求失败'
+        : detail
+    ElMessage.error(message)
     return Promise.reject(error)
   },
 )
 
 export default request
-

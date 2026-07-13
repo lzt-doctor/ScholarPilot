@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models import MistakeRecord, User
-from app.rag.agents import MistakeAnalysisAgent
+from app.rag.services import MistakeAnalysisService
 from app.schemas.mistake import MistakeCreate, MistakeRead, MistakeStatistics
 from app.utils.dependencies import get_current_user
 
@@ -17,11 +17,20 @@ async def create_mistake(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ) -> MistakeRecord:
-    analysis = await MistakeAnalysisAgent().analyze(
+    analysis, result = await MistakeAnalysisService().analyze(
         question_text=payload.question_text,
         user_answer=payload.user_answer,
         correct_answer=payload.correct_answer,
     )
+    if not result.succeeded:
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "code": result.error_code or "llm_unavailable",
+                "message": result.content,
+                "llm_mode": result.mode,
+            },
+        )
     mistake = MistakeRecord(
         user_id=current_user.id,
         subject=payload.subject,
@@ -73,4 +82,3 @@ def mistake_statistics(
         ],
         total=total,
     )
-

@@ -5,7 +5,7 @@
         <span class="brand-mark">S</span>
         <span>ScholarPilot</span>
       </div>
-      <p class="page-subtitle">登录后进入 Agentic RAG 学术工作台</p>
+      <p class="page-subtitle">登录后进入可追溯学术文档 RAG 工作台</p>
 
       <el-form ref="formRef" :model="form" :rules="rules" label-position="top" class="auth-form">
         <el-form-item label="用户名" prop="username">
@@ -80,4 +80,3 @@ const submit = async () => {
   font-weight: 700;
 }
 </style>
-

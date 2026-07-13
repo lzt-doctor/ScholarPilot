@@ -57,9 +57,14 @@
 <script setup>
 import { computed, nextTick, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { Upload } from '@element-plus/icons-vue'
-import * as echarts from 'echarts'
+import { BarChart, PieChart } from 'echarts/charts'
+import { GridComponent, TooltipComponent } from 'echarts/components'
+import { init, use } from 'echarts/core'
+import { CanvasRenderer } from 'echarts/renderers'
 
 import { getDashboardSummary } from '../api/dashboard'
+
+use([BarChart, PieChart, GridComponent, TooltipComponent, CanvasRenderer])
 
 const summary = reactive({
   documents_count: 0,
@@ -93,8 +98,8 @@ const load = async () => {
 }
 
 const renderCharts = () => {
-  docChart = docChart || echarts.init(docChartRef.value)
-  mistakeChart = mistakeChart || echarts.init(mistakeChartRef.value)
+  docChart = docChart || init(docChartRef.value)
+  mistakeChart = mistakeChart || init(mistakeChartRef.value)
 
   docChart.setOption({
     tooltip: { trigger: 'item' },
@@ -148,4 +153,3 @@ onUnmounted(() => {
   height: 220px;
 }
 </style>
-

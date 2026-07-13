@@ -19,6 +19,13 @@ class Document(Base):
     summary: Mapped[str | None] = mapped_column(Text)
     category: Mapped[str | None] = mapped_column(String(100), default="未分类")
     file_path: Mapped[str | None] = mapped_column(String(500))
+    embedding_model: Mapped[str] = mapped_column(String(255), nullable=False)
+    embedding_dimension: Mapped[int] = mapped_column(Integer, nullable=False)
+    embedding_version: Mapped[str] = mapped_column(String(64), nullable=False)
+    indexing_status: Mapped[str] = mapped_column(
+        String(32), nullable=False, default="pending", index=True
+    )
+    indexing_error: Mapped[str | None] = mapped_column(String(255))
 
     owner = relationship("User", back_populates="documents")
     chunks = relationship(
@@ -36,8 +43,9 @@ class DocumentChunk(Base):
     page_number: Mapped[int] = mapped_column(Integer, index=True)
     chunk_index: Mapped[int] = mapped_column(Integer)
     chunk_text: Mapped[str] = mapped_column(Text)
-    embedding: Mapped[list[float]] = mapped_column(Vector(settings.embedding_dimension))
+    embedding: Mapped[list[float]] = mapped_column(
+        Vector(settings.embedding_dimension), nullable=False
+    )
     section_title: Mapped[str | None] = mapped_column(String(255))
 
     document = relationship("Document", back_populates="chunks")
-

@@ -5,7 +5,7 @@
         <span class="brand-mark">S</span>
         <div>
           <div class="brand-title">ScholarPilot</div>
-          <div class="brand-caption">Agentic RAG Workspace</div>
+          <div class="brand-caption">Traceable RAG Workspace</div>
         </div>
       </div>
 
@@ -34,6 +34,10 @@
           <el-icon><TrendCharts /></el-icon>
           <span>数据统计</span>
         </el-menu-item>
+        <el-menu-item index="/runtime">
+          <el-icon><Monitor /></el-icon>
+          <span>运行状态</span>
+        </el-menu-item>
       </el-menu>
     </el-aside>
 
@@ -41,7 +45,7 @@
       <el-header class="topbar">
         <div>
           <strong>ScholarPilot</strong>
-          <span class="topbar-subtitle">学术资料智能问答与学习规划系统</span>
+          <span class="topbar-subtitle">可追溯学术文档 RAG 系统</span>
         </div>
         <div class="topbar-user">
           <el-icon><User /></el-icon>
@@ -59,7 +63,17 @@
 <script setup>
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { SwitchButton } from '@element-plus/icons-vue'
+import {
+  Calendar,
+  ChatDotRound,
+  CircleCloseFilled,
+  DataBoard,
+  FolderOpened,
+  Monitor,
+  SwitchButton,
+  TrendCharts,
+  User,
+} from '@element-plus/icons-vue'
 
 import { authStore } from '../store/auth'
 
@@ -163,6 +177,13 @@ const logout = () => {
   .topbar-subtitle {
     display: none;
   }
+
+  .topbar-user > span {
+    display: none;
+  }
+
+  .topbar {
+    padding: 0 12px;
+  }
 }
 </style>
-

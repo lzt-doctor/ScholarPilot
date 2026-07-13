@@ -22,8 +22,12 @@ class DocumentRead(BaseModel):
     upload_time: datetime
     summary: str | None = None
     category: str | None = None
+    embedding_model: str
+    embedding_dimension: int
+    embedding_version: str
+    indexing_status: str
+    indexing_error: str | None = None
 
 
 class DocumentDetail(DocumentRead):
     chunks: list[DocumentChunkRead] = []
-

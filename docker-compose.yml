@@ -19,7 +19,8 @@ services:
 
   backend:
     build:
-      context: ./backend
+      context: .
+      dockerfile: backend/Dockerfile
     container_name: scholarpilot-backend
     environment:
       DATABASE_URL: postgresql+psycopg2://scholarpilot:scholarpilot@db:5432/scholarpilot
@@ -27,7 +28,18 @@ services:
       UPLOAD_DIR: /app/uploads
       EMBEDDING_MODEL: ${EMBEDDING_MODEL:-sentence-transformers/all-MiniLM-L6-v2}
       EMBEDDING_DIMENSION: ${EMBEDDING_DIMENSION:-384}
+      EMBEDDING_VERSION: ${EMBEDDING_VERSION:-1}
       EMBEDDING_BACKEND: ${EMBEDDING_BACKEND:-auto}
+      ALLOW_EMBEDDING_FALLBACK: ${ALLOW_EMBEDDING_FALLBACK:-false}
+      MAX_UPLOAD_SIZE_MB: ${MAX_UPLOAD_SIZE_MB:-20}
+      RETRIEVAL_MODE: ${RETRIEVAL_MODE:-hybrid}
+      RETRIEVAL_CANDIDATE_K: ${RETRIEVAL_CANDIDATE_K:-20}
+      RETRIEVAL_MIN_RELEVANCE: ${RETRIEVAL_MIN_RELEVANCE:-0.25}
+      HYBRID_RRF_K: ${HYBRID_RRF_K:-60}
+      HYBRID_VECTOR_MODE: ${HYBRID_VECTOR_MODE:-hnsw}
+      HNSW_M: ${HNSW_M:-16}
+      HNSW_EF_CONSTRUCTION: ${HNSW_EF_CONSTRUCTION:-64}
+      HNSW_EF_SEARCH: ${HNSW_EF_SEARCH:-40}
       LLM_PROVIDER: ${LLM_PROVIDER:-mock}
       LLM_API_BASE: ${LLM_API_BASE:-}
       LLM_API_KEY: ${LLM_API_KEY:-}
@@ -37,6 +49,7 @@ services:
       - "8000:8000"
     volumes:
       - backend_uploads:/app/uploads
+      - ./experiments/results:/app/experiments/results
     depends_on:
       db:
         condition: service_healthy

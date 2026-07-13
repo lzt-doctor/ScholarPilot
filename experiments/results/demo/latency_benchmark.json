@@ -1,0 +1,2216 @@
+{
+  "result_scope": "demo",
+  "git_commit": "e15a49932876510ec0f21bf59d456d327b422135",
+  "timestamp": "2026-07-13T15:24:25.777446+00:00",
+  "dataset_version": "demo-v1",
+  "retrieval_config": {
+    "modes": [
+      "exact",
+      "hnsw",
+      "bm25",
+      "hybrid"
+    ],
+    "top_k": 10,
+    "iterations": 5,
+    "warmup_queries_per_mode": 5
+  },
+  "embedding_model": "demo/deterministic-token-hash",
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Linux-6.12.76-linuxkit-aarch64-with-glibc2.41",
+    "database": "PostgreSQL + pgvector",
+    "demo": true,
+    "git_dirty": "true"
+  },
+  "summary": {
+    "exact": {
+      "mean_ms": 1.3882183999703557,
+      "p50_ms": 1.3665829999354173,
+      "p95_ms": 1.618866400076513,
+      "p99_ms": 1.6356699200059666,
+      "queries_per_second": 675.1366246976922,
+      "sample_count": 25
+    },
+    "hnsw": {
+      "mean_ms": 1.313711679986227,
+      "p50_ms": 1.3071250000393775,
+      "p95_ms": 1.4415912000458773,
+      "p99_ms": 1.5598686798966808,
+      "queries_per_second": 713.4270538669406,
+      "sample_count": 25
+    },
+    "bm25": {
+      "mean_ms": 0.7531750400085002,
+      "p50_ms": 0.7578330000796996,
+      "p95_ms": 0.878025200063348,
+      "p99_ms": 0.8959620000041468,
+      "queries_per_second": 1187.47685012888,
+      "sample_count": 25
+    },
+    "hybrid": {
+      "mean_ms": 1.590916679961083,
+      "p50_ms": 1.5774999999393913,
+      "p95_ms": 1.7567167999459343,
+      "p99_ms": 1.7611500000202795,
+      "queries_per_second": 592.5288136670159,
+      "sample_count": 25
+    }
+  },
+  "raw_per_query_results": [
+    {
+      "query_id": "demo-q1",
+      "iteration": 0,
+      "retrieval_mode": "exact",
+      "latency_ms": 1.5144999999847641,
+      "returned_chunk_ids": [
+        -1001,
+        -1004,
+        -1005,
+        -1002,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q2",
+      "iteration": 0,
+      "retrieval_mode": "exact",
+      "latency_ms": 1.4544579998982954,
+      "returned_chunk_ids": [
+        -1002,
+        -1004,
+        -1001,
+        -1005,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q3",
+      "iteration": 0,
+      "retrieval_mode": "exact",
+      "latency_ms": 1.5121669998734433,
+      "returned_chunk_ids": [
+        -1003,
+        -1004,
+        -1005,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q4",
+      "iteration": 0,
+      "retrieval_mode": "exact",
+      "latency_ms": 1.3878750000912987,
+      "returned_chunk_ids": [
+        -1004,
+        -1002,
+        -1001,
+        -1005,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q5",
+      "iteration": 0,
+      "retrieval_mode": "exact",
+      "latency_ms": 1.6195830000924616,
+      "returned_chunk_ids": [
+        -1005,
+        -1004,
+        -1003,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q1",
+      "iteration": 1,
+      "retrieval_mode": "exact",
+      "latency_ms": 1.3259170000310405,
+      "returned_chunk_ids": [
+        -1001,
+        -1004,
+        -1005,
+        -1002,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q2",
+      "iteration": 1,
+      "retrieval_mode": "exact",
+      "latency_ms": 1.3861670001915627,
+      "returned_chunk_ids": [
+        -1002,
+        -1004,
+        -1001,
+        -1005,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q3",
+      "iteration": 1,
+      "retrieval_mode": "exact",
+      "latency_ms": 1.2577079999118723,
+      "returned_chunk_ids": [
+        -1003,
+        -1004,
+        -1005,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q4",
+      "iteration": 1,
+      "retrieval_mode": "exact",
+      "latency_ms": 1.4887919999182486,
+      "returned_chunk_ids": [
+        -1004,
+        -1002,
+        -1001,
+        -1005,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q5",
+      "iteration": 1,
+      "retrieval_mode": "exact",
+      "latency_ms": 1.3174169998819707,
+      "returned_chunk_ids": [
+        -1005,
+        -1004,
+        -1003,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q1",
+      "iteration": 2,
+      "retrieval_mode": "exact",
+      "latency_ms": 1.5532909999365074,
+      "returned_chunk_ids": [
+        -1001,
+        -1004,
+        -1005,
+        -1002,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q2",
+      "iteration": 2,
+      "retrieval_mode": "exact",
+      "latency_ms": 1.2338749997979903,
+      "returned_chunk_ids": [
+        -1002,
+        -1004,
+        -1001,
+        -1005,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q3",
+      "iteration": 2,
+      "retrieval_mode": "exact",
+      "latency_ms": 1.2183750000076543,
+      "returned_chunk_ids": [
+        -1003,
+        -1004,
+        -1005,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q4",
+      "iteration": 2,
+      "retrieval_mode": "exact",
+      "latency_ms": 1.3345419999950536,
+      "returned_chunk_ids": [
+        -1004,
+        -1002,
+        -1001,
+        -1005,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q5",
+      "iteration": 2,
+      "retrieval_mode": "exact",
+      "latency_ms": 1.4455419998284924,
+      "returned_chunk_ids": [
+        -1005,
+        -1004,
+        -1003,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q1",
+      "iteration": 3,
+      "retrieval_mode": "exact",
+      "latency_ms": 1.3593329999821435,
+      "returned_chunk_ids": [
+        -1001,
+        -1004,
+        -1005,
+        -1002,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q2",
+      "iteration": 3,
+      "retrieval_mode": "exact",
+      "latency_ms": 1.3117089999923337,
+      "returned_chunk_ids": [
+        -1002,
+        -1004,
+        -1001,
+        -1005,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q3",
+      "iteration": 3,
+      "retrieval_mode": "exact",
+      "latency_ms": 1.173417000018162,
+      "returned_chunk_ids": [
+        -1003,
+        -1004,
+        -1005,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q4",
+      "iteration": 3,
+      "retrieval_mode": "exact",
+      "latency_ms": 1.3364999999794236,
+      "returned_chunk_ids": [
+        -1004,
+        -1002,
+        -1001,
+        -1005,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q5",
+      "iteration": 3,
+      "retrieval_mode": "exact",
+      "latency_ms": 1.3714169999730075,
+      "returned_chunk_ids": [
+        -1005,
+        -1004,
+        -1003,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q1",
+      "iteration": 4,
+      "retrieval_mode": "exact",
+      "latency_ms": 1.6407499999786523,
+      "returned_chunk_ids": [
+        -1001,
+        -1004,
+        -1005,
+        -1002,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q2",
+      "iteration": 4,
+      "retrieval_mode": "exact",
+      "latency_ms": 1.3109999999869615,
+      "returned_chunk_ids": [
+        -1002,
+        -1004,
+        -1001,
+        -1005,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q3",
+      "iteration": 4,
+      "retrieval_mode": "exact",
+      "latency_ms": 1.168541999959416,
+      "returned_chunk_ids": [
+        -1003,
+        -1004,
+        -1005,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q4",
+      "iteration": 4,
+      "retrieval_mode": "exact",
+      "latency_ms": 1.6160000000127184,
+      "returned_chunk_ids": [
+        -1004,
+        -1002,
+        -1001,
+        -1005,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q5",
+      "iteration": 4,
+      "retrieval_mode": "exact",
+      "latency_ms": 1.3665829999354173,
+      "returned_chunk_ids": [
+        -1005,
+        -1004,
+        -1003,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q1",
+      "iteration": 0,
+      "retrieval_mode": "hnsw",
+      "latency_ms": 1.3148340001407632,
+      "returned_chunk_ids": [
+        -1001,
+        -1004,
+        -1005,
+        -1002,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q2",
+      "iteration": 0,
+      "retrieval_mode": "hnsw",
+      "latency_ms": 1.331207999783146,
+      "returned_chunk_ids": [
+        -1002,
+        -1004,
+        -1001,
+        -1005,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q3",
+      "iteration": 0,
+      "retrieval_mode": "hnsw",
+      "latency_ms": 1.2894999999844003,
+      "returned_chunk_ids": [
+        -1003,
+        -1004,
+        -1005,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q4",
+      "iteration": 0,
+      "retrieval_mode": "hnsw",
+      "latency_ms": 1.3071250000393775,
+      "returned_chunk_ids": [
+        -1004,
+        -1002,
+        -1001,
+        -1005,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q5",
+      "iteration": 0,
+      "retrieval_mode": "hnsw",
+      "latency_ms": 1.2783329998455883,
+      "returned_chunk_ids": [
+        -1005,
+        -1004,
+        -1003,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q1",
+      "iteration": 1,
+      "retrieval_mode": "hnsw",
+      "latency_ms": 1.2740830002258008,
+      "returned_chunk_ids": [
+        -1001,
+        -1004,
+        -1005,
+        -1002,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q2",
+      "iteration": 1,
+      "retrieval_mode": "hnsw",
+      "latency_ms": 1.2939159998950345,
+      "returned_chunk_ids": [
+        -1002,
+        -1004,
+        -1001,
+        -1005,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q3",
+      "iteration": 1,
+      "retrieval_mode": "hnsw",
+      "latency_ms": 1.3687499999832653,
+      "returned_chunk_ids": [
+        -1003,
+        -1004,
+        -1005,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q4",
+      "iteration": 1,
+      "retrieval_mode": "hnsw",
+      "latency_ms": 1.2024169998312573,
+      "returned_chunk_ids": [
+        -1004,
+        -1002,
+        -1001,
+        -1005,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q5",
+      "iteration": 1,
+      "retrieval_mode": "hnsw",
+      "latency_ms": 1.196375000063199,
+      "returned_chunk_ids": [
+        -1005,
+        -1004,
+        -1003,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q1",
+      "iteration": 2,
+      "retrieval_mode": "hnsw",
+      "latency_ms": 1.1434590001044853,
+      "returned_chunk_ids": [
+        -1001,
+        -1004,
+        -1005,
+        -1002,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q2",
+      "iteration": 2,
+      "retrieval_mode": "hnsw",
+      "latency_ms": 1.5947089998462616,
+      "returned_chunk_ids": [
+        -1002,
+        -1004,
+        -1001,
+        -1005,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q3",
+      "iteration": 2,
+      "retrieval_mode": "hnsw",
+      "latency_ms": 1.3997080000081041,
+      "returned_chunk_ids": [
+        -1003,
+        -1004,
+        -1005,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q4",
+      "iteration": 2,
+      "retrieval_mode": "hnsw",
+      "latency_ms": 1.4097920000040176,
+      "returned_chunk_ids": [
+        -1004,
+        -1002,
+        -1001,
+        -1005,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q5",
+      "iteration": 2,
+      "retrieval_mode": "hnsw",
+      "latency_ms": 1.3230839999778254,
+      "returned_chunk_ids": [
+        -1005,
+        -1004,
+        -1003,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q1",
+      "iteration": 3,
+      "retrieval_mode": "hnsw",
+      "latency_ms": 1.3945830000920978,
+      "returned_chunk_ids": [
+        -1001,
+        -1004,
+        -1005,
+        -1002,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q2",
+      "iteration": 3,
+      "retrieval_mode": "hnsw",
+      "latency_ms": 1.1957090000578319,
+      "returned_chunk_ids": [
+        -1002,
+        -1004,
+        -1001,
+        -1005,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q3",
+      "iteration": 3,
+      "retrieval_mode": "hnsw",
+      "latency_ms": 1.281332999951701,
+      "returned_chunk_ids": [
+        -1003,
+        -1004,
+        -1005,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q4",
+      "iteration": 3,
+      "retrieval_mode": "hnsw",
+      "latency_ms": 1.3421249998373241,
+      "returned_chunk_ids": [
+        -1004,
+        -1002,
+        -1001,
+        -1005,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q5",
+      "iteration": 3,
+      "retrieval_mode": "hnsw",
+      "latency_ms": 1.2979999999060965,
+      "returned_chunk_ids": [
+        -1005,
+        -1004,
+        -1003,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q1",
+      "iteration": 4,
+      "retrieval_mode": "hnsw",
+      "latency_ms": 1.3237080001999857,
+      "returned_chunk_ids": [
+        -1001,
+        -1004,
+        -1005,
+        -1002,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q2",
+      "iteration": 4,
+      "retrieval_mode": "hnsw",
+      "latency_ms": 1.2322499999299907,
+      "returned_chunk_ids": [
+        -1002,
+        -1004,
+        -1001,
+        -1005,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q3",
+      "iteration": 4,
+      "retrieval_mode": "hnsw",
+      "latency_ms": 1.2421249998624262,
+      "returned_chunk_ids": [
+        -1003,
+        -1004,
+        -1005,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q4",
+      "iteration": 4,
+      "retrieval_mode": "hnsw",
+      "latency_ms": 1.3561250000293512,
+      "returned_chunk_ids": [
+        -1004,
+        -1002,
+        -1001,
+        -1005,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q5",
+      "iteration": 4,
+      "retrieval_mode": "hnsw",
+      "latency_ms": 1.4495410000563425,
+      "returned_chunk_ids": [
+        -1005,
+        -1004,
+        -1003,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q1",
+      "iteration": 0,
+      "retrieval_mode": "bm25",
+      "latency_ms": 0.6580829999620619,
+      "returned_chunk_ids": [
+        -1001,
+        -1004,
+        -1002,
+        -1005
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q2",
+      "iteration": 0,
+      "retrieval_mode": "bm25",
+      "latency_ms": 0.7864170001994353,
+      "returned_chunk_ids": [
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q3",
+      "iteration": 0,
+      "retrieval_mode": "bm25",
+      "latency_ms": 0.6789169999592559,
+      "returned_chunk_ids": [
+        -1003,
+        -1004
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q4",
+      "iteration": 0,
+      "retrieval_mode": "bm25",
+      "latency_ms": 0.8067500000379368,
+      "returned_chunk_ids": [
+        -1004,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q5",
+      "iteration": 0,
+      "retrieval_mode": "bm25",
+      "latency_ms": 0.8472910001273704,
+      "returned_chunk_ids": [
+        -1005
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q1",
+      "iteration": 1,
+      "retrieval_mode": "bm25",
+      "latency_ms": 0.7792080000399437,
+      "returned_chunk_ids": [
+        -1001,
+        -1004,
+        -1002,
+        -1005
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q2",
+      "iteration": 1,
+      "retrieval_mode": "bm25",
+      "latency_ms": 0.7203750001281151,
+      "returned_chunk_ids": [
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q3",
+      "iteration": 1,
+      "retrieval_mode": "bm25",
+      "latency_ms": 0.7782090001455799,
+      "returned_chunk_ids": [
+        -1003,
+        -1004
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q4",
+      "iteration": 1,
+      "retrieval_mode": "bm25",
+      "latency_ms": 0.8237079998707486,
+      "returned_chunk_ids": [
+        -1004,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q5",
+      "iteration": 1,
+      "retrieval_mode": "bm25",
+      "latency_ms": 0.8484580000640563,
+      "returned_chunk_ids": [
+        -1005
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q1",
+      "iteration": 2,
+      "retrieval_mode": "bm25",
+      "latency_ms": 0.7216670001071179,
+      "returned_chunk_ids": [
+        -1001,
+        -1004,
+        -1002,
+        -1005
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q2",
+      "iteration": 2,
+      "retrieval_mode": "bm25",
+      "latency_ms": 0.6280829998104309,
+      "returned_chunk_ids": [
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q3",
+      "iteration": 2,
+      "retrieval_mode": "bm25",
+      "latency_ms": 0.7900830000835413,
+      "returned_chunk_ids": [
+        -1003,
+        -1004
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q4",
+      "iteration": 2,
+      "retrieval_mode": "bm25",
+      "latency_ms": 0.7247500000175933,
+      "returned_chunk_ids": [
+        -1004,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q5",
+      "iteration": 2,
+      "retrieval_mode": "bm25",
+      "latency_ms": 0.6742919999851438,
+      "returned_chunk_ids": [
+        -1005
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q1",
+      "iteration": 3,
+      "retrieval_mode": "bm25",
+      "latency_ms": 0.6685410000955017,
+      "returned_chunk_ids": [
+        -1001,
+        -1004,
+        -1002,
+        -1005
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q2",
+      "iteration": 3,
+      "retrieval_mode": "bm25",
+      "latency_ms": 0.7031669999832957,
+      "returned_chunk_ids": [
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q3",
+      "iteration": 3,
+      "retrieval_mode": "bm25",
+      "latency_ms": 0.8854170000631711,
+      "returned_chunk_ids": [
+        -1003,
+        -1004
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q4",
+      "iteration": 3,
+      "retrieval_mode": "bm25",
+      "latency_ms": 0.8272919999399164,
+      "returned_chunk_ids": [
+        -1004,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q5",
+      "iteration": 3,
+      "retrieval_mode": "bm25",
+      "latency_ms": 0.8159169999544247,
+      "returned_chunk_ids": [
+        -1005
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q1",
+      "iteration": 4,
+      "retrieval_mode": "bm25",
+      "latency_ms": 0.6403339998541924,
+      "returned_chunk_ids": [
+        -1001,
+        -1004,
+        -1002,
+        -1005
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q2",
+      "iteration": 4,
+      "retrieval_mode": "bm25",
+      "latency_ms": 0.678457999811144,
+      "returned_chunk_ids": [
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q3",
+      "iteration": 4,
+      "retrieval_mode": "bm25",
+      "latency_ms": 0.8992919999855076,
+      "returned_chunk_ids": [
+        -1003,
+        -1004
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q4",
+      "iteration": 4,
+      "retrieval_mode": "bm25",
+      "latency_ms": 0.7578330000796996,
+      "returned_chunk_ids": [
+        -1004,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q5",
+      "iteration": 4,
+      "retrieval_mode": "bm25",
+      "latency_ms": 0.6868339999073214,
+      "returned_chunk_ids": [
+        -1005
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q1",
+      "iteration": 0,
+      "retrieval_mode": "hybrid",
+      "latency_ms": 1.6591250000601576,
+      "returned_chunk_ids": [
+        -1001,
+        -1004,
+        -1005,
+        -1002,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q2",
+      "iteration": 0,
+      "retrieval_mode": "hybrid",
+      "latency_ms": 1.643834000105926,
+      "returned_chunk_ids": [
+        -1002,
+        -1001,
+        -1004,
+        -1005,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q3",
+      "iteration": 0,
+      "retrieval_mode": "hybrid",
+      "latency_ms": 1.5037910000046395,
+      "returned_chunk_ids": [
+        -1003,
+        -1004,
+        -1005,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q4",
+      "iteration": 0,
+      "retrieval_mode": "hybrid",
+      "latency_ms": 1.4472919999661826,
+      "returned_chunk_ids": [
+        -1004,
+        -1003,
+        -1002,
+        -1001,
+        -1005
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q5",
+      "iteration": 0,
+      "retrieval_mode": "hybrid",
+      "latency_ms": 1.4340419998006837,
+      "returned_chunk_ids": [
+        -1005,
+        -1004,
+        -1003,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q1",
+      "iteration": 1,
+      "retrieval_mode": "hybrid",
+      "latency_ms": 1.6380829999889102,
+      "returned_chunk_ids": [
+        -1001,
+        -1004,
+        -1005,
+        -1002,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q2",
+      "iteration": 1,
+      "retrieval_mode": "hybrid",
+      "latency_ms": 1.7119579999871348,
+      "returned_chunk_ids": [
+        -1002,
+        -1001,
+        -1004,
+        -1005,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q3",
+      "iteration": 1,
+      "retrieval_mode": "hybrid",
+      "latency_ms": 1.5769589999763411,
+      "returned_chunk_ids": [
+        -1003,
+        -1004,
+        -1005,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q4",
+      "iteration": 1,
+      "retrieval_mode": "hybrid",
+      "latency_ms": 1.5774999999393913,
+      "returned_chunk_ids": [
+        -1004,
+        -1003,
+        -1002,
+        -1001,
+        -1005
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q5",
+      "iteration": 1,
+      "retrieval_mode": "hybrid",
+      "latency_ms": 1.6162499998699786,
+      "returned_chunk_ids": [
+        -1005,
+        -1004,
+        -1003,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q1",
+      "iteration": 2,
+      "retrieval_mode": "hybrid",
+      "latency_ms": 1.756083999907787,
+      "returned_chunk_ids": [
+        -1001,
+        -1004,
+        -1005,
+        -1002,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q2",
+      "iteration": 2,
+      "retrieval_mode": "hybrid",
+      "latency_ms": 1.6637500000342698,
+      "returned_chunk_ids": [
+        -1002,
+        -1001,
+        -1004,
+        -1005,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q3",
+      "iteration": 2,
+      "retrieval_mode": "hybrid",
+      "latency_ms": 1.4348749998589483,
+      "returned_chunk_ids": [
+        -1003,
+        -1004,
+        -1005,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q4",
+      "iteration": 2,
+      "retrieval_mode": "hybrid",
+      "latency_ms": 1.5385419999347505,
+      "returned_chunk_ids": [
+        -1004,
+        -1003,
+        -1002,
+        -1001,
+        -1005
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q5",
+      "iteration": 2,
+      "retrieval_mode": "hybrid",
+      "latency_ms": 1.4457079998919653,
+      "returned_chunk_ids": [
+        -1005,
+        -1004,
+        -1003,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q1",
+      "iteration": 3,
+      "retrieval_mode": "hybrid",
+      "latency_ms": 1.7625000000407454,
+      "returned_chunk_ids": [
+        -1001,
+        -1004,
+        -1005,
+        -1002,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q2",
+      "iteration": 3,
+      "retrieval_mode": "hybrid",
+      "latency_ms": 1.7568749999554711,
+      "returned_chunk_ids": [
+        -1002,
+        -1001,
+        -1004,
+        -1005,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q3",
+      "iteration": 3,
+      "retrieval_mode": "hybrid",
+      "latency_ms": 1.4768749999802822,
+      "returned_chunk_ids": [
+        -1003,
+        -1004,
+        -1005,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q4",
+      "iteration": 3,
+      "retrieval_mode": "hybrid",
+      "latency_ms": 1.5663749998111598,
+      "returned_chunk_ids": [
+        -1004,
+        -1003,
+        -1002,
+        -1001,
+        -1005
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q5",
+      "iteration": 3,
+      "retrieval_mode": "hybrid",
+      "latency_ms": 1.4817500000390282,
+      "returned_chunk_ids": [
+        -1005,
+        -1004,
+        -1003,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q1",
+      "iteration": 4,
+      "retrieval_mode": "hybrid",
+      "latency_ms": 1.7290410000896372,
+      "returned_chunk_ids": [
+        -1001,
+        -1004,
+        -1005,
+        -1002,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q2",
+      "iteration": 4,
+      "retrieval_mode": "hybrid",
+      "latency_ms": 1.6834999998991407,
+      "returned_chunk_ids": [
+        -1002,
+        -1001,
+        -1004,
+        -1005,
+        -1003
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q3",
+      "iteration": 4,
+      "retrieval_mode": "hybrid",
+      "latency_ms": 1.384250000000975,
+      "returned_chunk_ids": [
+        -1003,
+        -1004,
+        -1005,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q4",
+      "iteration": 4,
+      "retrieval_mode": "hybrid",
+      "latency_ms": 1.7359999999371212,
+      "returned_chunk_ids": [
+        -1004,
+        -1003,
+        -1002,
+        -1001,
+        -1005
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q5",
+      "iteration": 4,
+      "retrieval_mode": "hybrid",
+      "latency_ms": 1.5479579999464477,
+      "returned_chunk_ids": [
+        -1005,
+        -1004,
+        -1003,
+        -1002,
+        -1001
+      ],
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    }
+  ]
+}

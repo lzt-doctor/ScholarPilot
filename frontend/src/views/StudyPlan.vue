@@ -3,7 +3,7 @@
     <div class="page-header">
       <div>
         <h1 class="page-title">学习计划</h1>
-        <p class="page-subtitle">由 StudyPlannerAgent 根据目标、基础和时间投入生成阶段化计划。</p>
+        <p class="page-subtitle">由学习规划服务根据目标、基础和时间投入生成阶段化计划。</p>
       </div>
     </div>
 
@@ -122,4 +122,3 @@ onMounted(load)
   }
 }
 </style>
-
