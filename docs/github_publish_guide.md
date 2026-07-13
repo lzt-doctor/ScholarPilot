@@ -5,7 +5,7 @@
 ## 仓库信息建议
 
 - Repository name：`ScholarPilot`
-- Description：`Agentic RAG academic assistant for document QA, study planning, and mistake analysis`
+- Description：`Traceable academic-document RAG with hybrid retrieval and reproducible evaluation`
 - Topics：`rag`、`agentic-rag`、`fastapi`、`vue3`、`pgvector`、`sentence-transformers`、`postgresql`、`graduate-application`
 
 ## 发布前检查
@@ -49,9 +49,9 @@ gh repo create ScholarPilot --public --source=. --remote=origin --push
 
 README 首页建议优先突出：
 
-- 一句话项目定位：Agentic RAG 学术资料问答与学习规划系统。
+- 一句话项目定位：可追溯学术文档 RAG 检索系统与可复现实验平台。
 - 核心技术：FastAPI、Vue 3、PostgreSQL、pgvector、sentence-transformers、LLMClient。
-- RAG 可信性：sources、similarity、confidence。
+- RAG 可追溯性：sources、similarity、evidence_strength、citation validity。
 - Docker 一键运行方式。
 - 截图：Dashboard、PDF 上传、AI 问答来源引用、学习计划、错题统计。
 

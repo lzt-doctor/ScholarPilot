@@ -1,0 +1,5 @@
+{"query_id":"demo-q1","question":"What is exact vector retrieval used for?","relevant_chunk_ids":[-1001],"category":"vector-retrieval","difficulty":"easy"}
+{"query_id":"demo-q2","question":"HNSW ef_search controls what tradeoff?","relevant_chunk_ids":[-1002],"category":"ann","difficulty":"medium"}
+{"query_id":"demo-q3","question":"BM25 如何处理关键词匹配？","relevant_chunk_ids":[-1003],"category":"lexical-retrieval","difficulty":"easy"}
+{"query_id":"demo-q4","question":"Reciprocal Rank Fusion 如何合并混合检索结果？","relevant_chunk_ids":[-1004],"category":"hybrid-retrieval","difficulty":"medium"}
+{"query_id":"demo-q5","question":"Why validate numbered citations in RAG answers?","relevant_chunk_ids":[-1005],"category":"traceability","difficulty":"medium"}

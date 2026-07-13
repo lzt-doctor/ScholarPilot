@@ -26,10 +26,22 @@ class Settings(BaseSettings):
     embedding_model: str | None = None
     embedding_model_name: str = "sentence-transformers/all-MiniLM-L6-v2"
     embedding_dimension: int = 384
+    embedding_version: str = "1"
     embedding_backend: str = "auto"
+    allow_embedding_fallback: bool = False
     rag_top_k: int = 4
     max_chunk_chars: int = 1000
     chunk_overlap_chars: int = 120
+    max_upload_size_mb: int = 20
+
+    retrieval_mode: str = "hybrid"
+    retrieval_candidate_k: int = 20
+    retrieval_min_relevance: float = 0.25
+    hybrid_rrf_k: int = 60
+    hybrid_vector_mode: str = "hnsw"
+    hnsw_m: int = 16
+    hnsw_ef_construction: int = 64
+    hnsw_ef_search: int = 40
 
     llm_provider: str = "mock"
     llm_api_base: str | None = None

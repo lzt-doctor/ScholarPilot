@@ -1,47 +1,34 @@
-# ScholarPilot：基于 Agentic RAG 的学术资料智能问答与学习规划系统
+# ScholarPilot：可追溯学术文档 RAG 检索系统与可复现实验平台
 
 ## 项目简介
 
-ScholarPilot 是一个面向研究生申请场景的 AI 学习辅助系统。项目支持上传学术 PDF，自动解析、切分并向量化存储，用户可以基于个人资料库进行 RAG 问答，并获得带页码和原文片段的来源引用。同时系统提供学习计划生成、错题记录、错因分析和数据统计功能。
+面向学术 PDF 的全栈检索增强问答系统，支持文档解析、向量版本追踪、Exact/HNSW/BM25/RRF Hybrid 检索、编号引用校验、运行状态披露和可复现实验。
 
 ## 技术栈
 
-Vue 3、Vite、Element Plus、Axios、ECharts、Python、FastAPI、SQLAlchemy、Pydantic、JWT、PostgreSQL、pgvector、sentence-transformers、PyMuPDF、Docker、Docker Compose。
+FastAPI、SQLAlchemy、Pydantic、Alembic、PostgreSQL、pgvector、sentence-transformers、jieba、rank-bm25、PyMuPDF、Vue 3、Element Plus、ECharts、Docker Compose、pytest、GitHub Actions。
 
 ## 个人职责
 
-- 设计并实现前后端分离架构和 Docker 化部署方案。
-- 设计 users、documents、document_chunks、chat_sessions、chat_messages、mistake_records、study_plans 等核心表。
-- 实现 PDF 解析、chunk 切分、embedding 生成、pgvector 相似度检索和 RAG 问答流程。
-- 设计 RetrievalAgent、StudyPlannerAgent、MistakeAnalysisAgent 三类 Agent。
-- 实现 Vue 3 管理台，包括文档管理、AI 问答、学习计划、错题分析和统计图表。
-
-## 核心功能
-
-- JWT 登录注册与用户隔离。
-- PDF 上传、解析、切分和向量化。
-- 基于 pgvector 的 Top-K 语义检索。
-- RAG 问答与来源引用。
-- 学习计划生成。
-- 错题记录、错因分析和知识点归因。
-- ECharts 数据统计面板。
-- Docker Compose 一键启动。
+- 设计用户、文档、chunk、会话和学习数据模型，使用 Alembic 管理增量迁移。
+- 实现 PDF 安全校验、线程池解析、embedding 维度检查、模型版本一致性与重新索引。
+- 抽象统一 Retriever，完成精确向量、HNSW、BM25 和 RRF Hybrid 检索及用户隔离。
+- 设计证据阈值、编号引用解析、引用合法性校验和运行元数据。
+- 建立 pytest、CI 和 JSON/CSV 实验平台，保存查询级原始结果与复现环境。
 
 ## 技术亮点
 
-- 使用 PostgreSQL + pgvector 将结构化业务数据与向量数据统一管理。
-- 通过 LLMClient 抽象支持 OpenAI、DeepSeek、Ollama 等模型接入。
-- 在无真实 LLM API 时提供 mock fallback，保证项目可演示。
-- Agent 职责拆分清晰，便于后续扩展为多 Agent 协作系统。
-- 保留 chunk 页码和原文片段，提高 RAG 回答可追溯性。
+- 不静默降级：真实模型失败、显式 mock 和显式 hash fallback 在 API 与页面中可区分。
+- 检索可审计：返回 similarity、lexical/vector rank、fused score、检索模式和 HNSW 参数。
+- 数据可治理：文档向量模型、维度和版本不一致时拒绝查询，避免混用向量空间。
+- 实验可复现：计算 Recall@5/10、MRR、nDCG@10、延迟分位数与 QPS，并保存 Git commit 和原始结果。
 
 ## 简历版 3 条 bullet points
 
-- 独立开发 ScholarPilot 学术资料智能问答系统，基于 FastAPI、Vue 3、PostgreSQL + pgvector 实现 PDF 解析、文本切分、向量化存储和 RAG 问答全流程。
-- 设计 RetrievalAgent、StudyPlannerAgent、MistakeAnalysisAgent，实现资料检索、学习计划生成、错题错因分析等 Agentic AI 能力，并通过 LLMClient 支持多模型扩展与 mock 演示。
-- 构建 Docker Compose 一键部署方案和 ECharts 数据看板，完成用户认证、文档管理、问答引用、学习计划、错题统计等完整 Web 产品闭环。
+- 基于 FastAPI、PostgreSQL/pgvector 与 Vue 3 构建可追溯学术文档 RAG 系统，实现 PDF 解析、向量版本管理、来源引用和 Docker 部署。
+- 抽象 Exact、HNSW、BM25 与 RRF Hybrid 统一检索接口，强制用户数据隔离，并返回检索排名、融合分数及实际运行参数。
+- 使用 Alembic、pytest 和 GitHub Actions 建立工程质量基线，开发 Recall/MRR/nDCG 与延迟消融脚本，结果包含 Git commit、配置和逐查询记录。
 
-## 面试介绍版 1 分钟话术
+## 1 分钟面试介绍
 
-ScholarPilot 是我为研究生申请展示设计的 Agentic RAG 项目，目标是把学术资料阅读、智能问答和学习规划整合到一个可运行的 Web 系统中。用户上传 PDF 后，后端会用 PyMuPDF 提取文本，按页码和段落切成 chunk，再用 sentence-transformers 生成 embedding 并存入 PostgreSQL 的 pgvector 字段。提问时系统会把问题向量化，通过余弦距离检索 Top-K 片段，拼接上下文后交给 LLMClient 生成回答，并返回文档名、页码和原文片段作为引用。项目还设计了三个 Agent：RetrievalAgent 负责检索，StudyPlannerAgent 负责学习计划，MistakeAnalysisAgent 负责错题分析。工程上我使用 FastAPI、SQLAlchemy、JWT、Vue 3、Element Plus 和 Docker Compose，实现了从数据库设计、RAG 流程到前端演示的完整闭环。
-
+ScholarPilot 是我做的一个面向学术 PDF 的可追溯 RAG 系统。它和普通聊天 Demo 的区别是把检索过程、模型版本和失败状态都暴露出来。文档上传后会通过 PyMuPDF 解析并生成向量，数据库记录模型、维度、版本和索引状态；查询支持精确余弦、pgvector HNSW、BM25 以及 RRF Hybrid，并且所有查询按用户隔离。如果模型版本不一致，系统会拒绝检索并提示重新索引。回答上下文使用编号来源，后端会校验模型引用的编号是否存在，同时明确说明 evidence strength 只表示检索证据，不是答案正确率。工程上我补了 Alembic、pytest、CI、Docker 和一套可复现实验脚本，能输出 Recall、MRR、nDCG、延迟分位数及每条查询的原始结果。当前 demo 数据只用于验证实验链路，我不会用它夸大真实检索效果。

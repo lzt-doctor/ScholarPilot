@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models import StudyPlan, User
-from app.rag.agents import StudyPlannerAgent
+from app.rag.services import StudyPlannerService
 from app.schemas.study_plan import StudyPlanGenerateRequest, StudyPlanRead
 from app.utils.dependencies import get_current_user
 
@@ -16,16 +16,25 @@ async def generate_study_plan(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ) -> StudyPlan:
-    plan_content = await StudyPlannerAgent().generate(
+    result = await StudyPlannerService().generate(
         goal=payload.goal,
         background=payload.background,
         weeks=payload.weeks,
         hours_per_week=payload.hours_per_week,
     )
+    if not result.succeeded:
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "code": result.error_code or "llm_unavailable",
+                "message": result.content,
+                "llm_mode": result.mode,
+            },
+        )
     plan = StudyPlan(
         user_id=current_user.id,
         goal=payload.goal,
-        plan_content=plan_content,
+        plan_content=result.content,
     )
     db.add(plan)
     db.commit()
@@ -43,4 +52,3 @@ def list_study_plans(
         .order_by(StudyPlan.created_at.desc())
         .all()
     )
-

@@ -1,0 +1,741 @@
+{
+  "result_scope": "demo",
+  "git_commit": "e15a49932876510ec0f21bf59d456d327b422135",
+  "timestamp": "2026-07-13T15:24:23.890205+00:00",
+  "dataset_version": "demo-v1",
+  "retrieval_config": {
+    "modes": [
+      "exact",
+      "hnsw",
+      "bm25",
+      "hybrid"
+    ],
+    "top_k": 10,
+    "parameters": {
+      "exact": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      },
+      "hnsw": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      },
+      "bm25": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      },
+      "hybrid": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    }
+  },
+  "embedding_model": "demo/deterministic-token-hash",
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Linux-6.12.76-linuxkit-aarch64-with-glibc2.41",
+    "database": "PostgreSQL + pgvector",
+    "demo": true,
+    "git_dirty": "true"
+  },
+  "summary": {
+    "exact": {
+      "recall_at_5": 1.0,
+      "recall_at_10": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_10": 1.0
+    },
+    "hnsw": {
+      "recall_at_5": 1.0,
+      "recall_at_10": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_10": 1.0
+    },
+    "bm25": {
+      "recall_at_5": 1.0,
+      "recall_at_10": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_10": 1.0
+    },
+    "hybrid": {
+      "recall_at_5": 1.0,
+      "recall_at_10": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_10": 1.0
+    }
+  },
+  "raw_per_query_results": [
+    {
+      "query_id": "demo-q1",
+      "question": "What is exact vector retrieval used for?",
+      "category": "vector-retrieval",
+      "difficulty": "easy",
+      "retrieval_mode": "exact",
+      "relevant_chunk_ids": [
+        -1001
+      ],
+      "returned_chunk_ids": [
+        -1001,
+        -1004,
+        -1005,
+        -1002,
+        -1003
+      ],
+      "latency_ms": 5.015624999941792,
+      "metrics": {
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_10": 1.0
+      },
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q2",
+      "question": "HNSW ef_search controls what tradeoff?",
+      "category": "ann",
+      "difficulty": "medium",
+      "retrieval_mode": "exact",
+      "relevant_chunk_ids": [
+        -1002
+      ],
+      "returned_chunk_ids": [
+        -1002,
+        -1004,
+        -1001,
+        -1005,
+        -1003
+      ],
+      "latency_ms": 2.196249999997235,
+      "metrics": {
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_10": 1.0
+      },
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q3",
+      "question": "BM25 如何处理关键词匹配？",
+      "category": "lexical-retrieval",
+      "difficulty": "easy",
+      "retrieval_mode": "exact",
+      "relevant_chunk_ids": [
+        -1003
+      ],
+      "returned_chunk_ids": [
+        -1003,
+        -1004,
+        -1005,
+        -1002,
+        -1001
+      ],
+      "latency_ms": 1.8290000000433793,
+      "metrics": {
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_10": 1.0
+      },
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q4",
+      "question": "Reciprocal Rank Fusion 如何合并混合检索结果？",
+      "category": "hybrid-retrieval",
+      "difficulty": "medium",
+      "retrieval_mode": "exact",
+      "relevant_chunk_ids": [
+        -1004
+      ],
+      "returned_chunk_ids": [
+        -1004,
+        -1002,
+        -1001,
+        -1005,
+        -1003
+      ],
+      "latency_ms": 1.6268330000457354,
+      "metrics": {
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_10": 1.0
+      },
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q5",
+      "question": "Why validate numbered citations in RAG answers?",
+      "category": "traceability",
+      "difficulty": "medium",
+      "retrieval_mode": "exact",
+      "relevant_chunk_ids": [
+        -1005
+      ],
+      "returned_chunk_ids": [
+        -1005,
+        -1004,
+        -1003,
+        -1002,
+        -1001
+      ],
+      "latency_ms": 1.4806249998855492,
+      "metrics": {
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_10": 1.0
+      },
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "index": "disabled"
+      }
+    },
+    {
+      "query_id": "demo-q1",
+      "question": "What is exact vector retrieval used for?",
+      "category": "vector-retrieval",
+      "difficulty": "easy",
+      "retrieval_mode": "hnsw",
+      "relevant_chunk_ids": [
+        -1001
+      ],
+      "returned_chunk_ids": [
+        -1001,
+        -1004,
+        -1005,
+        -1002,
+        -1003
+      ],
+      "latency_ms": 1.8609169999308506,
+      "metrics": {
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_10": 1.0
+      },
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q2",
+      "question": "HNSW ef_search controls what tradeoff?",
+      "category": "ann",
+      "difficulty": "medium",
+      "retrieval_mode": "hnsw",
+      "relevant_chunk_ids": [
+        -1002
+      ],
+      "returned_chunk_ids": [
+        -1002,
+        -1004,
+        -1001,
+        -1005,
+        -1003
+      ],
+      "latency_ms": 1.6564170000492595,
+      "metrics": {
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_10": 1.0
+      },
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q3",
+      "question": "BM25 如何处理关键词匹配？",
+      "category": "lexical-retrieval",
+      "difficulty": "easy",
+      "retrieval_mode": "hnsw",
+      "relevant_chunk_ids": [
+        -1003
+      ],
+      "returned_chunk_ids": [
+        -1003,
+        -1004,
+        -1005,
+        -1002,
+        -1001
+      ],
+      "latency_ms": 1.407041999982539,
+      "metrics": {
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_10": 1.0
+      },
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q4",
+      "question": "Reciprocal Rank Fusion 如何合并混合检索结果？",
+      "category": "hybrid-retrieval",
+      "difficulty": "medium",
+      "retrieval_mode": "hnsw",
+      "relevant_chunk_ids": [
+        -1004
+      ],
+      "returned_chunk_ids": [
+        -1004,
+        -1002,
+        -1001,
+        -1005,
+        -1003
+      ],
+      "latency_ms": 1.5357080001194845,
+      "metrics": {
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_10": 1.0
+      },
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q5",
+      "question": "Why validate numbered citations in RAG answers?",
+      "category": "traceability",
+      "difficulty": "medium",
+      "retrieval_mode": "hnsw",
+      "relevant_chunk_ids": [
+        -1005
+      ],
+      "returned_chunk_ids": [
+        -1005,
+        -1004,
+        -1003,
+        -1002,
+        -1001
+      ],
+      "latency_ms": 1.4410000001134904,
+      "metrics": {
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_10": 1.0
+      },
+      "retrieval_parameters": {
+        "top_k": 10,
+        "distance": "cosine",
+        "m": 16,
+        "ef_construction": 64,
+        "ef_search": 40,
+        "index": "ix_document_chunks_embedding_hnsw"
+      }
+    },
+    {
+      "query_id": "demo-q1",
+      "question": "What is exact vector retrieval used for?",
+      "category": "vector-retrieval",
+      "difficulty": "easy",
+      "retrieval_mode": "bm25",
+      "relevant_chunk_ids": [
+        -1001
+      ],
+      "returned_chunk_ids": [
+        -1001,
+        -1004,
+        -1002,
+        -1005
+      ],
+      "latency_ms": 263.50316699995346,
+      "metrics": {
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_10": 1.0
+      },
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q2",
+      "question": "HNSW ef_search controls what tradeoff?",
+      "category": "ann",
+      "difficulty": "medium",
+      "retrieval_mode": "bm25",
+      "relevant_chunk_ids": [
+        -1002
+      ],
+      "returned_chunk_ids": [
+        -1002,
+        -1001
+      ],
+      "latency_ms": 0.9901660000650736,
+      "metrics": {
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_10": 1.0
+      },
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q3",
+      "question": "BM25 如何处理关键词匹配？",
+      "category": "lexical-retrieval",
+      "difficulty": "easy",
+      "retrieval_mode": "bm25",
+      "relevant_chunk_ids": [
+        -1003
+      ],
+      "returned_chunk_ids": [
+        -1003,
+        -1004
+      ],
+      "latency_ms": 0.9289589997933945,
+      "metrics": {
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_10": 1.0
+      },
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q4",
+      "question": "Reciprocal Rank Fusion 如何合并混合检索结果？",
+      "category": "hybrid-retrieval",
+      "difficulty": "medium",
+      "retrieval_mode": "bm25",
+      "relevant_chunk_ids": [
+        -1004
+      ],
+      "returned_chunk_ids": [
+        -1004,
+        -1003
+      ],
+      "latency_ms": 0.805333000016617,
+      "metrics": {
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_10": 1.0
+      },
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q5",
+      "question": "Why validate numbered citations in RAG answers?",
+      "category": "traceability",
+      "difficulty": "medium",
+      "retrieval_mode": "bm25",
+      "relevant_chunk_ids": [
+        -1005
+      ],
+      "returned_chunk_ids": [
+        -1005
+      ],
+      "latency_ms": 1.2611659999492986,
+      "metrics": {
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_10": 1.0
+      },
+      "retrieval_parameters": {
+        "top_k": 10,
+        "tokenizer": "jieba",
+        "algorithm": "BM25Okapi"
+      }
+    },
+    {
+      "query_id": "demo-q1",
+      "question": "What is exact vector retrieval used for?",
+      "category": "vector-retrieval",
+      "difficulty": "easy",
+      "retrieval_mode": "hybrid",
+      "relevant_chunk_ids": [
+        -1001
+      ],
+      "returned_chunk_ids": [
+        -1001,
+        -1004,
+        -1005,
+        -1002,
+        -1003
+      ],
+      "latency_ms": 1.9695000000865548,
+      "metrics": {
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_10": 1.0
+      },
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q2",
+      "question": "HNSW ef_search controls what tradeoff?",
+      "category": "ann",
+      "difficulty": "medium",
+      "retrieval_mode": "hybrid",
+      "relevant_chunk_ids": [
+        -1002
+      ],
+      "returned_chunk_ids": [
+        -1002,
+        -1001,
+        -1004,
+        -1005,
+        -1003
+      ],
+      "latency_ms": 1.7702089999147574,
+      "metrics": {
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_10": 1.0
+      },
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q3",
+      "question": "BM25 如何处理关键词匹配？",
+      "category": "lexical-retrieval",
+      "difficulty": "easy",
+      "retrieval_mode": "hybrid",
+      "relevant_chunk_ids": [
+        -1003
+      ],
+      "returned_chunk_ids": [
+        -1003,
+        -1004,
+        -1005,
+        -1002,
+        -1001
+      ],
+      "latency_ms": 1.716416999897774,
+      "metrics": {
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_10": 1.0
+      },
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q4",
+      "question": "Reciprocal Rank Fusion 如何合并混合检索结果？",
+      "category": "hybrid-retrieval",
+      "difficulty": "medium",
+      "retrieval_mode": "hybrid",
+      "relevant_chunk_ids": [
+        -1004
+      ],
+      "returned_chunk_ids": [
+        -1004,
+        -1003,
+        -1002,
+        -1001,
+        -1005
+      ],
+      "latency_ms": 1.4956669999719452,
+      "metrics": {
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_10": 1.0
+      },
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    },
+    {
+      "query_id": "demo-q5",
+      "question": "Why validate numbered citations in RAG answers?",
+      "category": "traceability",
+      "difficulty": "medium",
+      "retrieval_mode": "hybrid",
+      "relevant_chunk_ids": [
+        -1005
+      ],
+      "returned_chunk_ids": [
+        -1005,
+        -1004,
+        -1003,
+        -1002,
+        -1001
+      ],
+      "latency_ms": 2.109291999886409,
+      "metrics": {
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_10": 1.0
+      },
+      "retrieval_parameters": {
+        "top_k": 10,
+        "candidate_k": 20,
+        "rrf_k": 60,
+        "vector_mode": "hnsw",
+        "vector_parameters": {
+          "top_k": 20,
+          "distance": "cosine",
+          "m": 16,
+          "ef_construction": 64,
+          "ef_search": 40,
+          "index": "ix_document_chunks_embedding_hnsw"
+        },
+        "lexical_parameters": {
+          "top_k": 20,
+          "tokenizer": "jieba",
+          "algorithm": "BM25Okapi"
+        }
+      }
+    }
+  ]
+}

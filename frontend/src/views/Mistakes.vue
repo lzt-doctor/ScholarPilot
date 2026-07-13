@@ -3,7 +3,7 @@
     <div class="page-header">
       <div>
         <h1 class="page-title">错题分析</h1>
-        <p class="page-subtitle">MistakeAnalysisAgent 自动总结错因和知识点，沉淀复盘数据。</p>
+        <p class="page-subtitle">错题分析服务总结错因和知识点，沉淀复盘数据。</p>
       </div>
       <el-button :icon="Refresh" @click="loadAll">刷新</el-button>
     </div>
@@ -117,4 +117,3 @@ onMounted(loadAll)
   margin: 0 8px 8px 0;
 }
 </style>
-
