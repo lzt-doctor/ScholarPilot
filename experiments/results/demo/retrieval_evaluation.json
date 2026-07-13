@@ -1,7 +1,7 @@
 {
   "result_scope": "demo",
-  "git_commit": "e15a49932876510ec0f21bf59d456d327b422135",
-  "timestamp": "2026-07-13T15:24:23.890205+00:00",
+  "git_commit": "32f626a17c60ba51aeb0ffebf518229ef8a8bb99",
+  "timestamp": "2026-07-13T15:59:07.765873+00:00",
   "dataset_version": "demo-v1",
   "retrieval_config": {
     "modes": [
@@ -57,7 +57,7 @@
     "platform": "Linux-6.12.76-linuxkit-aarch64-with-glibc2.41",
     "database": "PostgreSQL + pgvector",
     "demo": true,
-    "git_dirty": "true"
+    "git_dirty": "false"
   },
   "summary": {
     "exact": {
@@ -102,7 +102,7 @@
         -1002,
         -1003
       ],
-      "latency_ms": 5.015624999941792,
+      "latency_ms": 4.4098749999648135,
       "metrics": {
         "recall_at_5": 1.0,
         "recall_at_10": 1.0,
@@ -131,7 +131,7 @@
         -1005,
         -1003
       ],
-      "latency_ms": 2.196249999997235,
+      "latency_ms": 1.4003750002302695,
       "metrics": {
         "recall_at_5": 1.0,
         "recall_at_10": 1.0,
@@ -160,7 +160,7 @@
         -1002,
         -1001
       ],
-      "latency_ms": 1.8290000000433793,
+      "latency_ms": 1.5320409997912066,
       "metrics": {
         "recall_at_5": 1.0,
         "recall_at_10": 1.0,
@@ -189,7 +189,7 @@
         -1005,
         -1003
       ],
-      "latency_ms": 1.6268330000457354,
+      "latency_ms": 1.3963749997856212,
       "metrics": {
         "recall_at_5": 1.0,
         "recall_at_10": 1.0,
@@ -218,7 +218,7 @@
         -1002,
         -1001
       ],
-      "latency_ms": 1.4806249998855492,
+      "latency_ms": 1.288666999698762,
       "metrics": {
         "recall_at_5": 1.0,
         "recall_at_10": 1.0,
@@ -247,7 +247,7 @@
         -1002,
         -1003
       ],
-      "latency_ms": 1.8609169999308506,
+      "latency_ms": 1.6553750001548906,
       "metrics": {
         "recall_at_5": 1.0,
         "recall_at_10": 1.0,
@@ -279,7 +279,7 @@
         -1005,
         -1003
       ],
-      "latency_ms": 1.6564170000492595,
+      "latency_ms": 1.2185420000605518,
       "metrics": {
         "recall_at_5": 1.0,
         "recall_at_10": 1.0,
@@ -311,7 +311,7 @@
         -1002,
         -1001
       ],
-      "latency_ms": 1.407041999982539,
+      "latency_ms": 1.2214580001455033,
       "metrics": {
         "recall_at_5": 1.0,
         "recall_at_10": 1.0,
@@ -343,7 +343,7 @@
         -1005,
         -1003
       ],
-      "latency_ms": 1.5357080001194845,
+      "latency_ms": 1.2869170000158192,
       "metrics": {
         "recall_at_5": 1.0,
         "recall_at_10": 1.0,
@@ -375,7 +375,7 @@
         -1002,
         -1001
       ],
-      "latency_ms": 1.4410000001134904,
+      "latency_ms": 1.302832999954262,
       "metrics": {
         "recall_at_5": 1.0,
         "recall_at_10": 1.0,
@@ -406,7 +406,7 @@
         -1002,
         -1005
       ],
-      "latency_ms": 263.50316699995346,
+      "latency_ms": 263.4767089998604,
       "metrics": {
         "recall_at_5": 1.0,
         "recall_at_10": 1.0,
@@ -432,7 +432,7 @@
         -1002,
         -1001
       ],
-      "latency_ms": 0.9901660000650736,
+      "latency_ms": 1.119542000196816,
       "metrics": {
         "recall_at_5": 1.0,
         "recall_at_10": 1.0,
@@ -458,7 +458,7 @@
         -1003,
         -1004
       ],
-      "latency_ms": 0.9289589997933945,
+      "latency_ms": 0.8925839997573348,
       "metrics": {
         "recall_at_5": 1.0,
         "recall_at_10": 1.0,
@@ -484,7 +484,7 @@
         -1004,
         -1003
       ],
-      "latency_ms": 0.805333000016617,
+      "latency_ms": 0.7377919996542914,
       "metrics": {
         "recall_at_5": 1.0,
         "recall_at_10": 1.0,
@@ -509,7 +509,7 @@
       "returned_chunk_ids": [
         -1005
       ],
-      "latency_ms": 1.2611659999492986,
+      "latency_ms": 0.675917000080517,
       "metrics": {
         "recall_at_5": 1.0,
         "recall_at_10": 1.0,
@@ -538,7 +538,7 @@
         -1002,
         -1003
       ],
-      "latency_ms": 1.9695000000865548,
+      "latency_ms": 2.0893329997306864,
       "metrics": {
         "recall_at_5": 1.0,
         "recall_at_10": 1.0,
@@ -581,7 +581,7 @@
         -1005,
         -1003
       ],
-      "latency_ms": 1.7702089999147574,
+      "latency_ms": 2.017207999870152,
       "metrics": {
         "recall_at_5": 1.0,
         "recall_at_10": 1.0,
@@ -624,7 +624,7 @@
         -1002,
         -1001
       ],
-      "latency_ms": 1.716416999897774,
+      "latency_ms": 1.671499999702064,
       "metrics": {
         "recall_at_5": 1.0,
         "recall_at_10": 1.0,
@@ -667,7 +667,7 @@
         -1001,
         -1005
       ],
-      "latency_ms": 1.4956669999719452,
+      "latency_ms": 1.566749999710737,
       "metrics": {
         "recall_at_5": 1.0,
         "recall_at_10": 1.0,
@@ -710,7 +710,7 @@
         -1002,
         -1001
       ],
-      "latency_ms": 2.109291999886409,
+      "latency_ms": 1.6232909997597744,
       "metrics": {
         "recall_at_5": 1.0,
         "recall_at_10": 1.0,
